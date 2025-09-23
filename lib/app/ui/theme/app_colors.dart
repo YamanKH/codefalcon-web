@@ -1,9 +1,19 @@
 import 'package:flutter/material.dart';
 
 class AppColors {
-  static const Color primaryBackground = Color(0xFF121212); // Very dark grey/black
-  static const Color accentColor = Color(0xFF00BCD4); // Vibrant blue/cyan
-  static const Color textColor = Colors.white;
-  static const Color secondaryTextColor = Colors.white70;
-  static const Color secondaryBackground = Color(0xFF1E1E1E);
+  // Static colors that don't change with theme
+  static const Color accentColor = Color(0xFFC98753); // Brown/orange from logo
+
+  // Theme-aware colors that change based on brightness
+  static Color primaryBackground(BuildContext context) =>
+      Theme.of(context).scaffoldBackgroundColor;
+
+  static Color secondaryBackground(BuildContext context) =>
+      Theme.of(context).cardColor;
+
+  static Color textColor(BuildContext context) =>
+      Theme.of(context).textTheme.bodyLarge?.color ?? Colors.black;
+
+  static Color secondaryTextColor(BuildContext context) =>
+      Theme.of(context).textTheme.bodyMedium?.color ?? Colors.black54;
 }

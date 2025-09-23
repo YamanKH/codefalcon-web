@@ -1,13 +1,15 @@
 {
-    "name": "code_falcon",
-    "short_name": "code_falcon",
-    "start_url": ".",
+    "name": "كود فالكون",
+    "short_name": "كود فالكون",
+    "start_url": "/",
     "display": "standalone",
-    "background_color": "#0175C2",
-    "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "background_color": "#121212",
+    "theme_color": "#C98753",
+    "description": "شركة تطوير برمجيات متخصصة في حلول الويب والموبايل المبتكرة",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
+    "lang": "ar",
+    "dir": "rtl",
     "icons": [
         {
             "src": "icons/Icon-192.png",
