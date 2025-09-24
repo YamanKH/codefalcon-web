@@ -140,7 +140,11 @@ class _ContactSectionWidgetState extends State<ContactSectionWidget> {
       // Here you can handle form submission, e.g., send to backend or email
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('contact_success'.tr),
+          content: Text(
+            'contact_success'.tr,
+            style: AppTextStyles.bodyText(context)
+                .copyWith(color: AppColors.accentForegroundColor(context)),
+          ),
           backgroundColor: Theme.of(context).primaryColor,
         ),
       );

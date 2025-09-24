@@ -84,7 +84,7 @@ class _FooterWidgetState extends State<FooterWidget> {
                     child: Text(
                       'subscribe'.tr,
                       style: AppTextStyles.bodyText(context).copyWith(
-                        color: AppColors.primaryBackground(context),
+                        color: AppColors.accentForegroundColor(context),
                       ),
                     ),
                   ),
@@ -114,7 +114,7 @@ class _FooterWidgetState extends State<FooterWidget> {
           content: Text(
             'subscription_success'.tr,
             style: AppTextStyles.bodyText(context)
-                .copyWith(color: AppColors.primaryBackground(context)),
+                .copyWith(color: AppColors.accentForegroundColor(context)),
           ),
           backgroundColor: AppColors.accentColor,
         ),

@@ -9,61 +9,91 @@ class ThemeController extends GetxController {
     Get.changeThemeMode(isDarkMode.value ? ThemeMode.dark : ThemeMode.light);
   }
 
-  static ThemeData get darkTheme => ThemeData(
-    brightness: Brightness.dark,
-    primaryColor: const Color(0xFFC98753),
-    scaffoldBackgroundColor: const Color(0xFF121212),
-    cardColor: const Color(0xFF1E1E1E),
-    appBarTheme: const AppBarTheme(
-      backgroundColor: Color(0xFF121212),
-    ),
-    textTheme: const TextTheme(
-      bodyLarge: TextStyle(color: Color(0xFFF8F9FA)),
-      bodyMedium: TextStyle(color: Color(0xFFB0B3B8)),
-    ),
-    inputDecorationTheme: const InputDecorationTheme(
-      labelStyle: TextStyle(color: Color(0xFFF8F9FA)),
-      border: OutlineInputBorder(
-        borderSide: BorderSide(color: Color(0xFFC98753)),
-      ),
-      focusedBorder: OutlineInputBorder(
-        borderSide: BorderSide(color: Color(0xFFC98753)),
-      ),
-    ),
-    elevatedButtonTheme: ElevatedButtonThemeData(
-      style: ElevatedButton.styleFrom(
-        backgroundColor: const Color(0xFFC98753),
-        foregroundColor: const Color(0xFF121212),
-      ),
-    ),
-  );
+  static ThemeData get darkTheme {
+    const primary = Color(0xFFC98753);
+    const scaffold = Color(0xFF121212);
+    const surface = Color(0xFF1E1E1E);
+    final base = ThemeData(brightness: Brightness.dark);
+    final colorScheme = base.colorScheme.copyWith(
+      primary: primary,
+      secondary: primary,
+      surface: surface,
+      onPrimary: Colors.white,
+      onSecondary: Colors.white,
+      onSurface: const Color(0xFFF8F9FA),
+    );
 
-  static ThemeData get lightTheme => ThemeData(
-    brightness: Brightness.light,
-    primaryColor: const Color(0xFFC98753),
-    scaffoldBackgroundColor: Colors.white,
-    cardColor: const Color(0xFFF5F5F5),
-    appBarTheme: const AppBarTheme(
-      backgroundColor: Colors.white,
-    ),
-    textTheme: const TextTheme(
-      bodyLarge: TextStyle(color: Colors.black87),
-      bodyMedium: TextStyle(color: Colors.black54),
-    ),
-    inputDecorationTheme: const InputDecorationTheme(
-      labelStyle: TextStyle(color: Colors.black87),
-      border: OutlineInputBorder(
-        borderSide: BorderSide(color: Color(0xFFC98753)),
+    return base.copyWith(
+      colorScheme: colorScheme,
+      primaryColor: primary,
+      scaffoldBackgroundColor: scaffold,
+      cardColor: surface,
+      appBarTheme: const AppBarTheme(
+        backgroundColor: scaffold,
       ),
-      focusedBorder: OutlineInputBorder(
-        borderSide: BorderSide(color: Color(0xFFC98753)),
+      textTheme: base.textTheme.copyWith(
+        bodyLarge: const TextStyle(color: Color(0xFFF8F9FA)),
+        bodyMedium: const TextStyle(color: Color(0xFFB0B3B8)),
       ),
-    ),
-    elevatedButtonTheme: ElevatedButtonThemeData(
-      style: ElevatedButton.styleFrom(
-        backgroundColor: const Color(0xFFC98753),
-        foregroundColor: Colors.white,
+      inputDecorationTheme: InputDecorationTheme(
+        labelStyle: const TextStyle(color: Color(0xFFF8F9FA)),
+        border: const OutlineInputBorder(
+          borderSide: BorderSide(color: primary),
+        ),
+        focusedBorder: const OutlineInputBorder(
+          borderSide: BorderSide(color: primary),
+        ),
       ),
-    ),
-  );
+      elevatedButtonTheme: ElevatedButtonThemeData(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: colorScheme.primary,
+          foregroundColor: colorScheme.onPrimary,
+        ),
+      ),
+    );
+  }
+
+  static ThemeData get lightTheme {
+    const primary = Color(0xFFC98753);
+    const scaffold = Colors.white;
+    const surface = Color(0xFFF5F5F5);
+    final base = ThemeData(brightness: Brightness.light);
+    final colorScheme = base.colorScheme.copyWith(
+      primary: primary,
+      secondary: primary,
+      surface: surface,
+      onPrimary: Colors.white,
+      onSecondary: Colors.white,
+      onSurface: Colors.black87,
+    );
+
+    return base.copyWith(
+      colorScheme: colorScheme,
+      primaryColor: primary,
+      scaffoldBackgroundColor: scaffold,
+      cardColor: surface,
+      appBarTheme: const AppBarTheme(
+        backgroundColor: scaffold,
+      ),
+      textTheme: base.textTheme.copyWith(
+        bodyLarge: const TextStyle(color: Colors.black87),
+        bodyMedium: const TextStyle(color: Colors.black54),
+      ),
+      inputDecorationTheme: InputDecorationTheme(
+        labelStyle: const TextStyle(color: Colors.black87),
+        border: const OutlineInputBorder(
+          borderSide: BorderSide(color: primary),
+        ),
+        focusedBorder: const OutlineInputBorder(
+          borderSide: BorderSide(color: primary),
+        ),
+      ),
+      elevatedButtonTheme: ElevatedButtonThemeData(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: colorScheme.primary,
+          foregroundColor: colorScheme.onPrimary,
+        ),
+      ),
+    );
+  }
 }

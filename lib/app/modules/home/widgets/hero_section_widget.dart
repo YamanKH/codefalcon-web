@@ -25,7 +25,7 @@ class HeroSectionWidget extends StatelessWidget {
               // ),
               Positioned.fill(
                 child: Container(
-                  color: Colors.black.withValues(alpha: 0.9),
+                  // color: Colors.black.withValues(alpha: 0.9),
                 ),
               ),
               Center(

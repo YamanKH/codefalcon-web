@@ -86,7 +86,7 @@ class HomeView extends GetView<HomeController> {
             backgroundColor: AppColors.accentColor,
             child: Icon(
               Icons.arrow_upward,
-              color: AppColors.primaryBackground(context),
+              color: AppColors.accentForegroundColor(context),
             ),
           ),
           drawer: const DrawerWidget(),

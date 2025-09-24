@@ -11,6 +11,9 @@ class AppColors {
   static Color secondaryBackground(BuildContext context) =>
       Theme.of(context).cardColor;
 
+  static Color accentForegroundColor(BuildContext context) =>
+      Theme.of(context).colorScheme.onPrimary;
+
   static Color textColor(BuildContext context) =>
       Theme.of(context).textTheme.bodyLarge?.color ?? Colors.black;
 
