@@ -20,7 +20,7 @@ class TeamSectionWidget extends StatelessWidget {
       TeamMember(
         nameKey: 'team_member_1_name',
         titleKey: 'team_member_1_role',
-        imageUrl: 'https://api.dicebear.com/8.x/pixel-art/svg?seed=YamanAlkhateb',
+        imageUrl: 'https://api.dicebear.com/8.x/pixel-art/png?seed=YamanAlkhateb',
         socialLinks: {
           'linkedin': 'https://www.linkedin.com/in/yaman-alkhateb/',
           'github': 'https://github.com/YamanKH',
@@ -29,7 +29,7 @@ class TeamSectionWidget extends StatelessWidget {
       TeamMember(
         nameKey: 'team_member_2_name',
         titleKey: 'team_member_2_role',
-        imageUrl: 'https://api.dicebear.com/8.x/pixel-art/svg?seed=AreejFayadh',
+        imageUrl: 'https://api.dicebear.com/8.x/pixel-art/png?seed=AreejFayadh',
         socialLinks: {
           'linkedin': 'https://linkedin.com/in/areejfayadh',
           'github': 'https://github.com/areejfayadh',
@@ -38,7 +38,7 @@ class TeamSectionWidget extends StatelessWidget {
       TeamMember(
         nameKey: 'team_member_3_name',
         titleKey: 'team_member_3_role',
-        imageUrl: 'https://api.dicebear.com/8.x/pixel-art/svg?seed=AhmedMohamed',
+        imageUrl: 'https://api.dicebear.com/8.x/pixel-art/png?seed=AhmedMohamed',
         socialLinks: {
           'linkedin': 'https://linkedin.com/in/ahmedmohamed',
           'github': 'https://github.com/ahmedmohamed',
@@ -67,7 +67,7 @@ class TeamSectionWidget extends StatelessWidget {
               crossAxisCount: MediaQuery.of(context).size.width > 800 ? 2 : 1,
               crossAxisSpacing: 20,
               mainAxisSpacing: 20,
-              childAspectRatio: isSmallScreen ? 2.2 : 1.7,
+              childAspectRatio: isSmallScreen ? 2.5 : 1.7,
             ),
             itemCount: teamMembers.length,
             itemBuilder: (context, index) {
@@ -109,85 +109,152 @@ class TeamMemberCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isSmallScreen = MediaQuery.of(context).size.width < 600;
     return Card(
       color: AppColors.secondaryBackground(context),
       elevation: 5,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       child: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const CircleAvatar(
-              radius: 50,
-              backgroundImage: AssetImage('assets/logo.png'),
-            ),
-            const SizedBox(height: 15),
-            Flexible(
-              child: Text(
-                member.nameKey.tr,
-                style: AppTextStyles.bodyText(context).copyWith(
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.textColor(context),
-                ),
-                textAlign: TextAlign.center,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ),
-            const SizedBox(height: 5),
-            Flexible(
-              child: Text(
-                member.titleKey.tr,
-                style: AppTextStyles.bodyText(context).copyWith(
-                  fontSize: 14,
-                  color: AppColors.secondaryTextColor(context),
-                ),
-                textAlign: TextAlign.center,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ),
-            const SizedBox(height: 15),
-            Wrap(
-              alignment: WrapAlignment.center,
-              spacing: 8,
-              runSpacing: 8,
-              children: member.socialLinks.entries.map((entry) {
-                IconData iconData;
-                switch (entry.key) {
-                  case 'linkedin':
-                    iconData = FontAwesomeIcons.linkedin;
-                    break;
-                  case 'twitter':
-                    iconData = FontAwesomeIcons.twitter;
-                    break;
-                  case 'github':
-                    iconData = FontAwesomeIcons.github;
-                    break;
-                  default:
-                    iconData = Icons.link;
-                }
-                return IconButton(
-                  icon: FaIcon(
-                    iconData,
-                    color: AppColors.accentColor,
-                    size: 20,
+        padding: EdgeInsets.all(isSmallScreen ? 10 : 20),
+        child: isSmallScreen
+            ? Row(
+                children: [
+                  CircleAvatar(
+                    radius: 40,
+                    backgroundImage: AssetImage('assets/logo.png'),
                   ),
-                  padding: EdgeInsets.zero,
-                  constraints: const BoxConstraints(),
-                  onPressed: () async {
-                    if (await canLaunchUrl(Uri.parse(entry.value))) {
-                      await launchUrl(Uri.parse(entry.value));
-                    } else {
-                      debugPrint('Could not launch ${entry.value}');
-                    }
-                  },
-                );
-              }).toList(),
-            ),
-          ],
-        ),
+                  SizedBox(width: 10),
+                  Expanded(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          member.nameKey.tr,
+                          style: AppTextStyles.bodyText(context).copyWith(
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.textColor(context),
+                          ),
+                        ),
+                        SizedBox(height: 3),
+                        Text(
+                          member.titleKey.tr,
+                          style: AppTextStyles.bodyText(context).copyWith(
+                            fontSize: 12,
+                            color: AppColors.secondaryTextColor(context),
+                          ),
+                        ),
+                        SizedBox(height: 10),
+                        Wrap(
+                          spacing: 8,
+                          runSpacing: 8,
+                          children: member.socialLinks.entries.map((entry) {
+                            IconData iconData;
+                            switch (entry.key) {
+                              case 'linkedin':
+                                iconData = FontAwesomeIcons.linkedin;
+                                break;
+                              case 'twitter':
+                                iconData = FontAwesomeIcons.twitter;
+                                break;
+                              case 'github':
+                                iconData = FontAwesomeIcons.github;
+                                break;
+                              default:
+                                iconData = Icons.link;
+                            }
+                            return IconButton(
+                              icon: FaIcon(
+                                iconData,
+                                color: AppColors.accentColor,
+                                size: 20,
+                              ),
+                              padding: EdgeInsets.zero,
+                              constraints: const BoxConstraints(),
+                              onPressed: () async {
+                                if (await canLaunchUrl(Uri.parse(entry.value))) {
+                                  await launchUrl(Uri.parse(entry.value));
+                                } else {
+                                  debugPrint('Could not launch ${entry.value}');
+                                }
+                              },
+                            );
+                          }).toList(),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              )
+            : Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  CircleAvatar(
+                    radius: 50,
+                    backgroundImage: AssetImage('assets/logo.png'),
+                  ),
+                  SizedBox(height: 15),
+                  Flexible(
+                    child: Text(
+                      member.nameKey.tr,
+                      style: AppTextStyles.bodyText(context).copyWith(
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.textColor(context),
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                  SizedBox(height: 5),
+                  Flexible(
+                    child: Text(
+                      member.titleKey.tr,
+                      style: AppTextStyles.bodyText(context).copyWith(
+                        fontSize: 14,
+                        color: AppColors.secondaryTextColor(context),
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                  SizedBox(height: 15),
+                  Wrap(
+                    alignment: WrapAlignment.center,
+                    spacing: 8,
+                    runSpacing: 8,
+                    children: member.socialLinks.entries.map((entry) {
+                      IconData iconData;
+                      switch (entry.key) {
+                        case 'linkedin':
+                          iconData = FontAwesomeIcons.linkedin;
+                          break;
+                        case 'twitter':
+                          iconData = FontAwesomeIcons.twitter;
+                          break;
+                        case 'github':
+                          iconData = FontAwesomeIcons.github;
+                          break;
+                        default:
+                          iconData = Icons.link;
+                      }
+                      return IconButton(
+                        icon: FaIcon(
+                          iconData,
+                          color: AppColors.accentColor,
+                          size: 20,
+                        ),
+                        padding: EdgeInsets.zero,
+                        constraints: const BoxConstraints(),
+                        onPressed: () async {
+                          if (await canLaunchUrl(Uri.parse(entry.value))) {
+                            await launchUrl(Uri.parse(entry.value));
+                          } else {
+                            debugPrint('Could not launch ${entry.value}');
+                          }
+                        },
+                      );
+                    }).toList(),
+                  ),
+                ],
+              ),
       ),
     );
   }

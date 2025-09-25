@@ -10,9 +10,10 @@ class HeroSectionWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
+        final isSmallScreen = MediaQuery.of(context).size.width < 600;
         return Container(
           key: const GlobalObjectKey('homeSection'),
-          height: MediaQuery.of(context).size.height * 0.8,
+          height: isSmallScreen ? MediaQuery.of(context).size.height * 0.6 : MediaQuery.of(context).size.height * 0.8,
           width: double.infinity,
           color: Theme.of(context).scaffoldBackgroundColor,
           child: Stack(

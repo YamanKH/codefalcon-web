@@ -10,6 +10,7 @@ class TechnologiesSectionWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isSmallScreen = MediaQuery.of(context).size.width < 600;
     final List<_TechnologyItem> technologies = [
       _TechnologyItem(
         nameKey: 'flutter',
@@ -63,23 +64,23 @@ class TechnologiesSectionWidget extends StatelessWidget {
 
     return LayoutBuilder(
       builder: (context, constraints) {
-        int crossAxisCount = 2;
+        int crossAxisCount = 1;
         if (constraints.maxWidth > 1200) {
           crossAxisCount = 4;
         } else if (constraints.maxWidth > 800) {
           crossAxisCount = 3;
-        } else if (constraints.maxWidth > 500) {
+        } else if (constraints.maxWidth > 600) {
           crossAxisCount = 2;
         }
 
         return Container(
           key: const GlobalObjectKey('technologiesSection'),
-          padding: const EdgeInsets.all(40),
+          padding: EdgeInsets.all(isSmallScreen ? 20 : 40),
           color: AppColors.primaryBackground(context),
           child: Column(
             children: [
               _buildSectionTitle('technologies_title'.tr, context),
-              const SizedBox(height: 30),
+              SizedBox(height: isSmallScreen ? 20 : 30),
               AnimationLimiter(
                 child: GridView.count(
                   shrinkWrap: true,
@@ -139,17 +140,18 @@ class TechnologyCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isSmallScreen = MediaQuery.of(context).size.width < 600;
     return Card(
       color: AppColors.secondaryBackground(context),
       elevation: 5,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       child: Padding(
-        padding: const EdgeInsets.all(20),
+        padding: EdgeInsets.all(isSmallScreen ? 15 : 20),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            FaIcon(icon, size: 40, color: color),
-            const SizedBox(height: 10),
+            FaIcon(icon, size: isSmallScreen ? 30 : 40, color: color),
+            SizedBox(height: isSmallScreen ? 8 : 10),
             Text(
               nameKey.tr,
               textAlign: TextAlign.center,
@@ -158,12 +160,14 @@ class TechnologyCard extends StatelessWidget {
                 color: AppColors.textColor(context),
               ),
             ),
-            const SizedBox(height: 6),
+            SizedBox(height: isSmallScreen ? 4 : 6),
             Text(
               descriptionKey.tr,
               textAlign: TextAlign.center,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
               style: AppTextStyles.bodyText(context)
-                  .copyWith(color: AppColors.secondaryTextColor(context), fontSize: 14),
+                  .copyWith(color: AppColors.secondaryTextColor(context), fontSize: isSmallScreen ? 12 : 14),
             ),
           ],
         ),

@@ -45,15 +45,31 @@ class HomeView extends GetView<HomeController> {
         child: Scaffold(
           body: SingleChildScrollView(
             controller: scrollController,
-            child: Column(
-              children: enableAnimations
-                  ? AnimationConfiguration.toStaggeredList(
-                    duration: const Duration(milliseconds: 375),
-                    childAnimationBuilder: (widget) => SlideAnimation(
-                      verticalOffset: 50.0,
-                      child: FadeInAnimation(child: widget),
-                    ),
-                    children: const [
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(minWidth: 320),
+              child: Column(
+                children: enableAnimations
+                    ? AnimationConfiguration.toStaggeredList(
+                      duration: const Duration(milliseconds: 375),
+                      childAnimationBuilder: (widget) => SlideAnimation(
+                        verticalOffset: 50.0,
+                        child: FadeInAnimation(child: widget),
+                      ),
+                      children: const [
+                        HeaderWidget(),
+                        HeroSectionWidget(),
+                        AboutSectionWidget(),
+                        ServicesSectionWidget(),
+                        ProjectsSectionWidget(),
+                        TechnologiesSectionWidget(),
+                        TeamSectionWidget(),
+                        TestimonialsSectionWidget(),
+                        FAQSectionWidget(),
+                        ContactSectionWidget(),
+                        FooterWidget(),
+                      ],
+                    )
+                  : const [
                       HeaderWidget(),
                       HeroSectionWidget(),
                       AboutSectionWidget(),
@@ -66,22 +82,9 @@ class HomeView extends GetView<HomeController> {
                       ContactSectionWidget(),
                       FooterWidget(),
                     ],
-                  )
-                : const [
-                    HeaderWidget(),
-                    HeroSectionWidget(),
-                    AboutSectionWidget(),
-                    ServicesSectionWidget(),
-                    ProjectsSectionWidget(),
-                    TechnologiesSectionWidget(),
-                    TeamSectionWidget(),
-                    TestimonialsSectionWidget(),
-                    FAQSectionWidget(),
-                    ContactSectionWidget(),
-                    FooterWidget(),
-                  ],
+              ),
+            ),
           ),
-        ),
           floatingActionButton: FloatingActionButton(
             onPressed: () {
               scrollController.animateTo(

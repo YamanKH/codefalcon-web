@@ -169,7 +169,7 @@ class ProjectCard extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                   color: AppColors.accentColor,
                 ),
-                maxLines: 1,
+                maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),
               const SizedBox(height: 6),

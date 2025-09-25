@@ -27,13 +27,14 @@ class TestimonialsSectionWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isSmallScreen = MediaQuery.of(context).size.width < 600;
     final List<Testimonial> testimonials = [
       Testimonial(
         nameKey: 'testimonial_1_name',
         positionKey: 'testimonial_1_position',
         companyKey: 'testimonial_1_company',
         messageKey: 'testimonial_1_message',
-        imageUrl: 'https://api.dicebear.com/8.x/avataaars/svg?seed=SarahAhmed',
+        imageUrl: 'https://api.dicebear.com/8.x/avataaars/png?seed=SarahAhmed',
         rating: 5,
       ),
       Testimonial(
@@ -41,7 +42,7 @@ class TestimonialsSectionWidget extends StatelessWidget {
         positionKey: 'testimonial_2_position',
         companyKey: 'testimonial_2_company',
         messageKey: 'testimonial_2_message',
-        imageUrl: 'https://api.dicebear.com/8.x/avataaars/svg?seed=MohamedAli',
+        imageUrl: 'https://api.dicebear.com/8.x/avataaars/png?seed=MohamedAli',
         rating: 5,
       ),
       Testimonial(
@@ -49,18 +50,18 @@ class TestimonialsSectionWidget extends StatelessWidget {
         positionKey: 'testimonial_3_position',
         companyKey: 'testimonial_3_company',
         messageKey: 'testimonial_3_message',
-        imageUrl: 'https://api.dicebear.com/8.x/avataaars/svg?seed=FatmaHassan',
+        imageUrl: 'https://api.dicebear.com/8.x/avataaars/png?seed=FatmaHassan',
         rating: 5,
       ),
     ];
 
     return Container(
-      padding: const EdgeInsets.all(40),
+      padding: EdgeInsets.all(isSmallScreen ? 20 : 40),
       color: AppColors.secondaryBackground(context),
       child: Column(
         children: [
           _buildSectionTitle('testimonials_title'.tr, context),
-          const SizedBox(height: 30),
+          SizedBox(height: isSmallScreen ? 20 : 30),
           GridView.builder(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
@@ -107,12 +108,13 @@ class TestimonialCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isSmallScreen = MediaQuery.of(context).size.width < 600;
     return Card(
       color: AppColors.primaryBackground(context),
       elevation: 5,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
       child: Padding(
-        padding: const EdgeInsets.all(20),
+        padding: EdgeInsets.all(isSmallScreen ? 15 : 20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

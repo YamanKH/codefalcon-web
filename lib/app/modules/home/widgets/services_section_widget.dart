@@ -143,40 +143,71 @@ class ServiceCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isSmallScreen = MediaQuery.of(context).size.width < 600;
     return Card(
       color: AppColors.primaryBackground(context),
       elevation: 5,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       child: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(icon, size: 40, color: AppColors.accentColor),
-            const SizedBox(height: 10),
-            Flexible(
-              child: Text(
-                titleKey.tr,
-                textAlign: TextAlign.center,
-                style: AppTextStyles.bodyText(context).copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
+        padding: EdgeInsets.all(isSmallScreen ? 15 : 20),
+        child: isSmallScreen
+            ? Row(
+                children: [
+                  Icon(icon, size: 30, color: AppColors.accentColor),
+                  SizedBox(width: 10),
+                  Expanded(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          titleKey.tr,
+                          style: AppTextStyles.bodyText(context).copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        SizedBox(height: 5),
+                        Text(
+                          descriptionKey.tr,
+                          style: AppTextStyles.bodyText(context).copyWith(fontSize: 12),
+                          maxLines: 3,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              )
+            : Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(icon, size: 40, color: AppColors.accentColor),
+                  const SizedBox(height: 10),
+                  Flexible(
+                    child: Text(
+                      titleKey.tr,
+                      textAlign: TextAlign.center,
+                      style: AppTextStyles.bodyText(context).copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  Flexible(
+                    child: Text(
+                      descriptionKey.tr,
+                      textAlign: TextAlign.center,
+                      style: AppTextStyles.bodyText(context).copyWith(fontSize: 14),
+                      maxLines: 4,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                ],
               ),
-            ),
-            const SizedBox(height: 10),
-            Flexible(
-              child: Text(
-                descriptionKey.tr,
-                textAlign: TextAlign.center,
-                style: AppTextStyles.bodyText(context).copyWith(fontSize: 14),
-                maxLines: 4,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }
