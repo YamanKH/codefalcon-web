@@ -31,32 +31,32 @@ class ServicesSectionWidget extends StatelessWidget {
           _ServiceItem(
             titleKey: 'web_dev',
             descriptionKey: 'web_dev_desc',
-            icon: FontAwesomeIcons.globe,
+            icon: Icons.language,
           ),
           _ServiceItem(
             titleKey: 'mobile_dev',
             descriptionKey: 'mobile_dev_desc',
-            icon: FontAwesomeIcons.mobileScreenButton,
+            icon: Icons.phone_android,
           ),
           _ServiceItem(
             titleKey: 'ui_ux',
             descriptionKey: 'ui_ux_desc',
-            icon: FontAwesomeIcons.paintbrush,
+            icon: Icons.design_services,
           ),
           _ServiceItem(
             titleKey: 'consulting',
             descriptionKey: 'consulting_desc',
-            icon: FontAwesomeIcons.lightbulb,
+            icon: Icons.lightbulb,
           ),
           _ServiceItem(
             titleKey: 'ai_solutions',
             descriptionKey: 'ai_solutions_desc',
-            icon: FontAwesomeIcons.robot,
+            icon: Icons.smart_toy,
           ),
           _ServiceItem(
             titleKey: 'cloud_services',
             descriptionKey: 'cloud_services_desc',
-            icon: FontAwesomeIcons.cloud,
+            icon: Icons.cloud,
           ),
         ];
 
@@ -90,7 +90,7 @@ class ServicesSectionWidget extends StatelessWidget {
                         crossAxisCount: crossAxisCount,
                         crossAxisSpacing: 20,
                         mainAxisSpacing: 20,
-                        childAspectRatio: isSmallScreen ? 1.8 : 1.4,
+                        childAspectRatio: isSmallScreen ? 1.2 : 1.0,
                         children: AnimationConfiguration.toStaggeredList(
                           duration: const Duration(milliseconds: 375),
                           childAnimationBuilder: (widget) => SlideAnimation(
@@ -152,7 +152,7 @@ class ServiceCard extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            FaIcon(icon, size: 50, color: AppColors.accentColor),
+            Icon(icon, size: 40, color: AppColors.accentColor),
             const SizedBox(height: 10),
             Flexible(
               child: Text(

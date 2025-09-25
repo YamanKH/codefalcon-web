@@ -27,6 +27,13 @@ class HomeView extends GetView<HomeController> {
   Widget build(BuildContext context) {
     final ScrollController scrollController = ScrollController();
 
+    // Ensure scroll starts at top
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (scrollController.hasClients) {
+        scrollController.jumpTo(0.0);
+      }
+    });
+
     final localeController = Get.find<LocaleController>();
 
     final widget = Obx(() {

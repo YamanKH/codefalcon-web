@@ -66,7 +66,6 @@ class _ContactSectionWidgetState extends State<ContactSectionWidget> {
                           return null;
                         },
                         textInputAction: TextInputAction.next,
-                        autofocus: true,
                       ),
                       const SizedBox(height: 20),
                       TextFormField(

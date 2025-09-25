@@ -1,0 +1,11 @@
+id,name,link,imageurl,techused,date,updated_at,description
+1,تطبيق التجارة الإلكترونية,https://example.com/ecommerce,https://picsum.photos/800/600?random=1,Flutter,Dart,Firebase,2023-10-01T10:00:00.000Z,2023-10-01T10:00:00.000Z,تطبيق للتسوق عبر الإنترنت مع دمج الدفع والتسليم
+2,تطبيق الطقس,https://example.com/weather,https://picsum.photos/800/600?random=2,React,JavaScript,API,2023-10-02T11:00:00.000Z,2023-10-02T11:00:00.000Z,تطبيق يعرض حالة الطقس الحالية والتنبؤات
+3,مدير المهام,https://example.com/tasks,https://picsum.photos/800/600?random=3,Flutter,Dart,SQLite,2023-10-03T12:00:00.000Z,2023-10-03T12:00:00.000Z,أداة لإدارة المهام اليومية وتتبع التقدم
+4,منصة التدوين,https://example.com/blog,https://picsum.photos/800/600?random=4,Node.js,Express,MongoDB,2023-10-04T13:00:00.000Z,2023-10-04T13:00:00.000Z,منصة لإنشاء ونشر المقالات والمدونات
+5,تطبيق الدردشة,https://example.com/chat,https://picsum.photos/800/600?random=5,Flutter,Dart,WebSocket,2023-10-05T14:00:00.000Z,2023-10-05T14:00:00.000Z,تطبيق دردشة فورية مع دعم الرسائل النصية والصور
+6,متجر الكتب,https://example.com/bookstore,https://picsum.photos/800/600?random=6,React,Node.js,PostgreSQL,2023-10-06T15:00:00.000Z,2023-10-06T15:00:00.000Z,متجر إلكتروني لبيع الكتب مع بحث وتقييمات
+7,تطبيق اللياقة البدنية,https://example.com/fitness,https://picsum.photos/800/600?random=7,Flutter,Dart,Health Kit,2023-10-07T16:00:00.000Z,2023-10-07T16:00:00.000Z,تطبيق لتتبع التمارين وتحقيق الأهداف الصحية
+8,منصة التعلم,https://example.com/learning,https://picsum.photos/800/600?random=8,Angular,TypeScript,Firebase,2023-10-08T17:00:00.000Z,2023-10-08T17:00:00.000Z,منصة تعليمية مع دورات واختبارات تفاعلية
+9,تطبيق الموسيقى,https://example.com/music,https://picsum.photos/800/600?random=9,React Native,JavaScript,Spotify API,2023-10-09T18:00:00.000Z,2023-10-09T18:00:00.000Z,مشغل موسيقى مع قوائم تشغيل وقدرات البحث
+10,أداة إدارة المشاريع,https://example.com/pm,https://picsum.photos/800/600?random=10,Vue.js,JavaScript,Node.js,2023-10-10T19:00:00.000Z,2023-10-10T19:00:00.000Z,أداة لإدارة المشاريع مع تتبع المهام والفرق
