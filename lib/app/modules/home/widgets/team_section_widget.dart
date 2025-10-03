@@ -7,6 +7,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:code_falcon/app/ui/theme/app_colors.dart';
 import 'package:code_falcon/app/ui/theme/app_text_styles.dart';
 import '../models/team_member.dart';
+import '../home_controller.dart';
 
 class TeamSectionWidget extends StatelessWidget {
   const TeamSectionWidget({super.key});
@@ -15,78 +16,90 @@ class TeamSectionWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isSmallScreen = MediaQuery.of(context).size.width < 600;
-    final List<TeamMember> teamMembers = [
-      TeamMember(
-        nameKey: 'team_member_1_name',
-        titleKey: 'team_member_1_role',
-        imageUrl: 'https://api.dicebear.com/8.x/pixel-art/png?seed=YamanAlkhateb',
-        socialLinks: {
-          'linkedin': 'https://www.linkedin.com/in/yaman-alkhateb/',
-          'github': 'https://github.com/YamanKH',
-        },
-      ),
-      TeamMember(
-        nameKey: 'team_member_2_name',
-        titleKey: 'team_member_2_role',
-        imageUrl: 'https://api.dicebear.com/8.x/pixel-art/png?seed=AreejFayadh',
-        socialLinks: {
-          'linkedin': 'https://linkedin.com/in/areejfayadh',
-          'github': 'https://github.com/areejfayadh',
-        },
-      ),
-      TeamMember(
-        nameKey: 'team_member_3_name',
-        titleKey: 'team_member_3_role',
-        imageUrl: 'https://api.dicebear.com/8.x/pixel-art/png?seed=AhmedMohamed',
-        socialLinks: {
-          'linkedin': 'https://linkedin.com/in/ahmedmohamed',
-          'github': 'https://github.com/ahmedmohamed',
-        },
-      ),
-    ];
-
-    return Container(
-      key: const GlobalObjectKey('teamSection'),
-      padding: EdgeInsets.all(isSmallScreen ? 20 : 40),
-      color: AppColors.primaryBackground(context),
-      child: Column(
-        children: AnimationConfiguration.toStaggeredList(
-          duration: const Duration(milliseconds: 375),
-          childAnimationBuilder: (widget) => SlideAnimation(
-            verticalOffset: 50.0,
-            child: FadeInAnimation(child: widget),
-          ),
-          children: [
-            _buildSectionTitle('team_title'.tr, context),
-            const SizedBox(height: 30),
-          GridView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: MediaQuery.of(context).size.width > 800 ? 2 : 1,
-              crossAxisSpacing: 20,
-              mainAxisSpacing: 20,
-              childAspectRatio: isSmallScreen ? 2.5 : 1.7,
-            ),
-            itemCount: teamMembers.length,
-            itemBuilder: (context, index) {
-              final member = teamMembers[index];
-              return enableAnimations
-                  ? AnimationConfiguration.staggeredGrid(
-                      position: index,
-                      duration: const Duration(milliseconds: 375),
-                      columnCount: MediaQuery.of(context).size.width > 800 ? 2 : 1,
-                      child: ScaleAnimation(
-                        child: FadeInAnimation(child: TeamMemberCard(member: member)),
-                      ),
-                    )
-                  : TeamMemberCard(member: member);
+    return GetX<HomeController>(
+      builder: (controller) {
+        final isLoading = controller.isLoadingTeams.value;
+        final teamMembers = controller.teamMembers.isNotEmpty ? controller.teamMembers : [
+          TeamMember(
+            id: '1',
+            name: 'Yaman Alkhateb',
+            role: 'Founder & CEO',
+            imageUrl: 'https://api.dicebear.com/8.x/pixel-art/png?seed=YamanAlkhateb',
+            socialLinks: {
+              'linkedin': 'https://www.linkedin.com/in/yaman-alkhateb/',
+              'github': 'https://github.com/YamanKH',
             },
           ),
-          ],
-        ),
-      ),
+          TeamMember(
+            id: '2',
+            name: 'Areej Fayadh',
+            role: 'Software Engineer',
+            imageUrl: 'https://api.dicebear.com/8.x/pixel-art/png?seed=AreejFayadh',
+            socialLinks: {
+              'linkedin': 'https://linkedin.com/in/areejfayadh',
+              'github': 'https://github.com/areejfayadh',
+            },
+          ),
+          TeamMember(
+            id: '3',
+            name: 'Ahmed Mohamed',
+            role: 'UI/UX Designer',
+            imageUrl: 'https://api.dicebear.com/8.x/pixel-art/png?seed=AhmedMohamed',
+            socialLinks: {
+              'linkedin': 'https://linkedin.com/in/ahmedmohamed',
+              'github': 'https://github.com/ahmedmohamed',
+            },
+          ),
+        ];
+
+        final isSmallScreen = MediaQuery.of(context).size.width < 600;
+
+        return Container(
+          key: const GlobalObjectKey('teamSection'),
+          padding: EdgeInsets.all(isSmallScreen ? 20 : 40),
+          color: AppColors.primaryBackground(context),
+          child: Column(
+            children: AnimationConfiguration.toStaggeredList(
+              duration: const Duration(milliseconds: 375),
+              childAnimationBuilder: (widget) => SlideAnimation(
+                verticalOffset: 50.0,
+                child: FadeInAnimation(child: widget),
+              ),
+              children: [
+                _buildSectionTitle('team_title'.tr, context),
+                const SizedBox(height: 30),
+                if (isLoading)
+                  const Center(child: CircularProgressIndicator())
+                else
+                  GridView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: MediaQuery.of(context).size.width > 800 ? 2 : 1,
+                      crossAxisSpacing: 20,
+                      mainAxisSpacing: 20,
+                      childAspectRatio: isSmallScreen ? 2.5 : 1.7,
+                    ),
+                    itemCount: teamMembers.length,
+                    itemBuilder: (context, index) {
+                      final member = teamMembers[index];
+                      return enableAnimations
+                          ? AnimationConfiguration.staggeredGrid(
+                              position: index,
+                              duration: const Duration(milliseconds: 375),
+                              columnCount: MediaQuery.of(context).size.width > 800 ? 2 : 1,
+                              child: ScaleAnimation(
+                                child: FadeInAnimation(child: TeamMemberCard(member: member)),
+                              ),
+                            )
+                          : TeamMemberCard(member: member);
+                    },
+                  ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 
@@ -121,7 +134,9 @@ class TeamMemberCard extends StatelessWidget {
                 children: [
                   CircleAvatar(
                     radius: 40,
-                    backgroundImage: AssetImage('assets/logo.png'),
+                    backgroundImage: member.imageUrl != null && member.imageUrl!.isNotEmpty
+                        ? NetworkImage(member.imageUrl!)
+                        : AssetImage('assets/logo.png'),
                   ),
                   SizedBox(width: 10),
                   Expanded(
@@ -130,7 +145,7 @@ class TeamMemberCard extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          member.nameKey.tr,
+                          member.name,
                           style: AppTextStyles.bodyText(context).copyWith(
                             fontWeight: FontWeight.bold,
                             color: AppColors.textColor(context),
@@ -138,7 +153,7 @@ class TeamMemberCard extends StatelessWidget {
                         ),
                         SizedBox(height: 3),
                         Text(
-                          member.titleKey.tr,
+                          member.role,
                           style: AppTextStyles.bodyText(context).copyWith(
                             fontSize: 12,
                             color: AppColors.secondaryTextColor(context),
@@ -191,12 +206,14 @@ class TeamMemberCard extends StatelessWidget {
                 children: [
                   CircleAvatar(
                     radius: 50,
-                    backgroundImage: AssetImage('assets/logo.png'),
+                    backgroundImage: member.imageUrl != null && member.imageUrl!.isNotEmpty
+                        ? NetworkImage(member.imageUrl!)
+                        : AssetImage('assets/logo.png'),
                   ),
                   SizedBox(height: 15),
                   Flexible(
                     child: Text(
-                      member.nameKey.tr,
+                      member.name,
                       style: AppTextStyles.bodyText(context).copyWith(
                         fontWeight: FontWeight.bold,
                         color: AppColors.textColor(context),
@@ -207,7 +224,7 @@ class TeamMemberCard extends StatelessWidget {
                   SizedBox(height: 5),
                   Flexible(
                     child: Text(
-                      member.titleKey.tr,
+                      member.role,
                       style: AppTextStyles.bodyText(context).copyWith(
                         fontSize: 14,
                         color: AppColors.secondaryTextColor(context),

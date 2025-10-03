@@ -4,6 +4,8 @@ import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:code_falcon/app/ui/theme/app_colors.dart';
 import 'package:code_falcon/app/ui/theme/app_text_styles.dart';
+import '../models/social_link.dart';
+import '../home_controller.dart';
 
 class ContactSectionWidget extends StatefulWidget {
   const ContactSectionWidget({super.key});
@@ -20,115 +22,113 @@ class _ContactSectionWidgetState extends State<ContactSectionWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final List<Map<String, String>> socialLinks = [
-      {
-        "url": "https://www.youtube.com/@CodingWithYaMaNn",
-        "platform": "youtube",
-      },
-      {"url": "https://x.com/MaNoOox", "platform": "twitter"},
-      {"url": "https://www.instagram.com/manoooz7/", "platform": "instagram"},
-      {"url": "https://www.tiktok.com/@manoooz7", "platform": "tiktok"},
-      {
-        "url": "https://www.snapchat.com/add/manoooz7?share_id=VOMvd2JQY40&locale=en-SA",
-        "platform": "snapchat",
-      },
-      {"url": "https://wa.me/963954783983", "platform": "whatsapp"},
-    ];
+    return GetX<HomeController>(
+      builder: (controller) {
+        final socialLinks = controller.socialLinks.isNotEmpty ? controller.socialLinks : [
+          SocialLink(id: '1', platform: 'youtube', url: 'https://www.youtube.com/@CodingWithYaMaNn'),
+          SocialLink(id: '2', platform: 'twitter', url: 'https://x.com/MaNoOox'),
+          SocialLink(id: '3', platform: 'instagram', url: 'https://www.instagram.com/manoooz7/'),
+          SocialLink(id: '4', platform: 'tiktok', url: 'https://www.tiktok.com/@manoooz7'),
+          SocialLink(id: '5', platform: 'snapchat', url: 'https://www.snapchat.com/add/manoooz7?share_id=VOMvd2JQY40&locale=en-SA'),
+          SocialLink(id: '6', platform: 'whatsapp', url: 'https://wa.me/963954783983'),
+        ];
 
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        final isSmallScreen = constraints.maxWidth < 600;
-        return Container(
-          key: const GlobalObjectKey('contactSection'),
-          padding: EdgeInsets.all(isSmallScreen ? 20 : 40),
-          color: AppColors.primaryBackground(context),
-          child: Column(
-            children: [
-          _buildSectionTitle('contact_title'.tr, context),
-              const SizedBox(height: 30),
-              ConstrainedBox(
-                constraints: BoxConstraints(
-                  maxWidth: isSmallScreen ? constraints.maxWidth * 0.9 : 600,
-                ),
-                child: Form(
-                  key: _formKey,
-                  child: Column(
-                    children: [
-                      TextFormField(
-                        controller: _nameController,
-                        decoration: InputDecoration(
-                          labelText: 'name'.tr,
-                        ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'name_required'.tr;
-                          }
-                          return null;
-                        },
-                        textInputAction: TextInputAction.next,
+        return LayoutBuilder(
+          builder: (context, constraints) {
+            final isSmallScreen = constraints.maxWidth < 600;
+            return Container(
+              key: const GlobalObjectKey('contactSection'),
+              padding: EdgeInsets.all(isSmallScreen ? 20 : 40),
+              color: AppColors.primaryBackground(context),
+              child: Column(
+                children: [
+              _buildSectionTitle('contact_title'.tr, context),
+                  const SizedBox(height: 30),
+                  ConstrainedBox(
+                    constraints: BoxConstraints(
+                      maxWidth: isSmallScreen ? constraints.maxWidth * 0.9 : 600,
+                    ),
+                    child: Form(
+                      key: _formKey,
+                      child: Column(
+                        children: [
+                          TextFormField(
+                            controller: _nameController,
+                            decoration: InputDecoration(
+                              labelText: 'name'.tr,
+                            ),
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'name_required'.tr;
+                              }
+                              return null;
+                            },
+                            textInputAction: TextInputAction.next,
+                          ),
+                          const SizedBox(height: 20),
+                          TextFormField(
+                            controller: _emailController,
+                            decoration: InputDecoration(
+                              labelText: 'email'.tr,
+                            ),
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'email_required'.tr;
+                              }
+                              if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
+                                return 'email_invalid'.tr;
+                              }
+                              return null;
+                            },
+                          ),
+                          const SizedBox(height: 20),
+                          TextFormField(
+                            controller: _messageController,
+                            maxLines: 5,
+                            decoration: InputDecoration(
+                              labelText: 'message'.tr,
+                            ),
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'message_required'.tr;
+                              }
+                              return null;
+                            },
+                          ),
+                          const SizedBox(height: 30),
+                          ElevatedButton(
+                            onPressed: _submitForm,
+                            style: ElevatedButton.styleFrom(
+                              padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                            ),
+                            child: Text('send'.tr),
+                          ),
+                        ],
                       ),
-                      const SizedBox(height: 20),
-                      TextFormField(
-                        controller: _emailController,
-                        decoration: InputDecoration(
-                          labelText: 'email'.tr,
-                        ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'email_required'.tr;
-                          }
-                          if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
-                            return 'email_invalid'.tr;
-                          }
-                          return null;
-                        },
-                      ),
-                      const SizedBox(height: 20),
-                      TextFormField(
-                        controller: _messageController,
-                        maxLines: 5,
-                        decoration: InputDecoration(
-                          labelText: 'message'.tr,
-                        ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'message_required'.tr;
-                          }
-                          return null;
-                        },
-                      ),
-                      const SizedBox(height: 30),
-                      ElevatedButton(
-                        onPressed: _submitForm,
-                        style: ElevatedButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
-                        ),
-                        child: Text('send'.tr),
-                      ),
-                    ],
+                    ),
                   ),
-                ),
+                  const SizedBox(height: 50),
+                  Text(
+                    'social_contact'.tr,
+                    textAlign: TextAlign.center,
+                    style: AppTextStyles.bodyText(context),
+                  ),
+                  const SizedBox(height: 30),
+                  Wrap(
+                    alignment: WrapAlignment.center,
+                    spacing: 20,
+                    runSpacing: 20,
+                    children: socialLinks.map((link) {
+                      return SocialIcon(
+                        platform: link.platform,
+                        url: link.url,
+                      );
+                    }).toList(),
+                  ),
+                ],
               ),
-              const SizedBox(height: 50),
-              Text(
-                'social_contact'.tr,
-                textAlign: TextAlign.center,
-                style: AppTextStyles.bodyText(context),
-              ),
-              const SizedBox(height: 30),
-              Wrap(
-                alignment: WrapAlignment.center,
-                spacing: 20,
-                runSpacing: 20,
-                children: socialLinks.map((link) {
-                  return SocialIcon(
-                    platform: link['platform']!,
-                    url: link['url']!,
-                  );
-                }).toList(),
-              ),
-            ],
-          ),
+            );
+          },
         );
       },
     );

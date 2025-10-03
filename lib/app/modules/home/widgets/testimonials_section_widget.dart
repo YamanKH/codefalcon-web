@@ -3,89 +3,86 @@ import 'package:get/get.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:code_falcon/app/ui/theme/app_colors.dart';
 import 'package:code_falcon/app/ui/theme/app_text_styles.dart';
+import '../models/testimonial.dart';
+import '../home_controller.dart';
 
-class Testimonial {
-  final String nameKey;
-  final String positionKey;
-  final String companyKey;
-  final String messageKey;
-  final String imageUrl;
-  final int rating;
-
-  Testimonial({
-    required this.nameKey,
-    required this.positionKey,
-    required this.companyKey,
-    required this.messageKey,
-    required this.imageUrl,
-    required this.rating,
-  });
-}
 
 class TestimonialsSectionWidget extends StatelessWidget {
   const TestimonialsSectionWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final isSmallScreen = MediaQuery.of(context).size.width < 600;
-    final List<Testimonial> testimonials = [
-      Testimonial(
-        nameKey: 'testimonial_1_name',
-        positionKey: 'testimonial_1_position',
-        companyKey: 'testimonial_1_company',
-        messageKey: 'testimonial_1_message',
-        imageUrl: 'https://api.dicebear.com/8.x/avataaars/png?seed=SarahAhmed',
-        rating: 5,
-      ),
-      Testimonial(
-        nameKey: 'testimonial_2_name',
-        positionKey: 'testimonial_2_position',
-        companyKey: 'testimonial_2_company',
-        messageKey: 'testimonial_2_message',
-        imageUrl: 'https://api.dicebear.com/8.x/avataaars/png?seed=MohamedAli',
-        rating: 5,
-      ),
-      Testimonial(
-        nameKey: 'testimonial_3_name',
-        positionKey: 'testimonial_3_position',
-        companyKey: 'testimonial_3_company',
-        messageKey: 'testimonial_3_message',
-        imageUrl: 'https://api.dicebear.com/8.x/avataaars/png?seed=FatmaHassan',
-        rating: 5,
-      ),
-    ];
-
-    return Container(
-      padding: EdgeInsets.all(isSmallScreen ? 20 : 40),
-      color: AppColors.secondaryBackground(context),
-      child: Column(
-        children: [
-          _buildSectionTitle('testimonials_title'.tr, context),
-          SizedBox(height: isSmallScreen ? 20 : 30),
-          GridView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: MediaQuery.of(context).size.width > 800 ? 3 : 1,
-              crossAxisSpacing: 20,
-              mainAxisSpacing: 20,
-              childAspectRatio: 1.2,
-            ),
-            itemCount: testimonials.length,
-            itemBuilder: (context, index) {
-              final testimonial = testimonials[index];
-              return AnimationConfiguration.staggeredGrid(
-                position: index,
-                duration: const Duration(milliseconds: 375),
-                columnCount: MediaQuery.of(context).size.width > 800 ? 3 : 1,
-                child: ScaleAnimation(
-                  child: FadeInAnimation(child: TestimonialCard(testimonial: testimonial)),
-                ),
-              );
-            },
+    return GetX<HomeController>(
+      builder: (controller) {
+        final isLoading = controller.isLoadingTestimonials.value;
+        final testimonials = controller.testimonials.isNotEmpty ? controller.testimonials : [
+          Testimonial(
+            id: '1',
+            name: 'Sarah Ahmed',
+            position: 'CEO',
+            company: 'TechCorp',
+            message: 'Excellent service and support!',
+            imageUrl: 'https://api.dicebear.com/8.x/avataaars/png?seed=SarahAhmed',
+            rating: 5,
           ),
-        ],
-      ),
+          Testimonial(
+            id: '2',
+            name: 'Mohamed Ali',
+            position: 'Developer',
+            company: 'StartupXYZ',
+            message: 'Highly recommend their work.',
+            imageUrl: 'https://api.dicebear.com/8.x/avataaars/png?seed=MohamedAli',
+            rating: 5,
+          ),
+          Testimonial(
+            id: '3',
+            name: 'Fatma Hassan',
+            position: 'Manager',
+            company: 'InnovateLtd',
+            message: 'Professional and timely delivery.',
+            imageUrl: 'https://api.dicebear.com/8.x/avataaars/png?seed=FatmaHassan',
+            rating: 5,
+          ),
+        ];
+
+        final isSmallScreen = MediaQuery.of(context).size.width < 600;
+
+        return Container(
+          padding: EdgeInsets.all(isSmallScreen ? 20 : 40),
+          color: AppColors.secondaryBackground(context),
+          child: Column(
+            children: [
+              _buildSectionTitle('testimonials_title'.tr, context),
+              SizedBox(height: isSmallScreen ? 20 : 30),
+              if (isLoading)
+                const Center(child: CircularProgressIndicator())
+              else
+                GridView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: MediaQuery.of(context).size.width > 800 ? 3 : 1,
+                    crossAxisSpacing: 20,
+                    mainAxisSpacing: 20,
+                    childAspectRatio: 1.2,
+                  ),
+                  itemCount: testimonials.length,
+                  itemBuilder: (context, index) {
+                    final testimonial = testimonials[index];
+                    return AnimationConfiguration.staggeredGrid(
+                      position: index,
+                      duration: const Duration(milliseconds: 375),
+                      columnCount: MediaQuery.of(context).size.width > 800 ? 3 : 1,
+                      child: ScaleAnimation(
+                        child: FadeInAnimation(child: TestimonialCard(testimonial: testimonial)),
+                      ),
+                    );
+                  },
+                ),
+            ],
+          ),
+        );
+      },
     );
   }
 
@@ -131,7 +128,7 @@ class TestimonialCard extends StatelessWidget {
             const SizedBox(height: 15),
             Expanded(
               child: Text(
-                '"${testimonial.messageKey.tr}"',
+                '"${testimonial.message}"',
                 style: AppTextStyles.bodyText(context).copyWith(
                   fontStyle: FontStyle.italic,
                   color: AppColors.textColor(context),
@@ -145,7 +142,9 @@ class TestimonialCard extends StatelessWidget {
               children: [
                 CircleAvatar(
                   radius: 20,
-                  backgroundImage: NetworkImage(testimonial.imageUrl),
+                  backgroundImage: testimonial.imageUrl != null && testimonial.imageUrl!.isNotEmpty
+                      ? NetworkImage(testimonial.imageUrl!)
+                      : AssetImage('assets/logo.png'),
                 ),
                 const SizedBox(width: 10),
                 Expanded(
@@ -153,14 +152,14 @@ class TestimonialCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        testimonial.nameKey.tr,
+                        testimonial.name,
                         style: AppTextStyles.bodyText(context).copyWith(
                           fontWeight: FontWeight.bold,
                           color: AppColors.accentColor,
                         ),
                       ),
                       Text(
-                        '${testimonial.positionKey.tr} - ${testimonial.companyKey.tr}',
+                        '${testimonial.position} - ${testimonial.company}',
                         style: AppTextStyles.bodyText(context).copyWith(
                           fontSize: 12,
                           color: AppColors.secondaryTextColor(context),
