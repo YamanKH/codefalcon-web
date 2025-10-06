@@ -26,6 +26,7 @@ class DrawerWidget extends StatelessWidget {
           const DrawerNavLink(titleKey: 'home', sectionKey: 'homeSection'),
           const DrawerNavLink(titleKey: 'about', sectionKey: 'aboutSection'),
           const DrawerNavLink(titleKey: 'services', sectionKey: 'servicesSection'),
+          const CalculatorDrawerNavLink(titleKey: 'calculator'),
           const DrawerNavLink(titleKey: 'projects', sectionKey: 'projectsSection'),
           const DrawerNavLink(titleKey: 'team', sectionKey: 'teamSection'),
           const DrawerNavLink(titleKey: 'contact', sectionKey: 'contactSection'),
@@ -62,6 +63,27 @@ class DrawerNavLink extends StatelessWidget {
       globalKey.currentContext!,
       duration: const Duration(milliseconds: 500),
       curve: Curves.easeInOut,
+    );
+  }
+}
+
+class CalculatorDrawerNavLink extends StatelessWidget {
+  final String titleKey;
+
+  const CalculatorDrawerNavLink({super.key, required this.titleKey});
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      title: Text(
+        titleKey.tr,
+        style: AppTextStyles.bodyText(context)
+            .copyWith(color: AppColors.textColor(context)),
+      ),
+      onTap: () {
+        Get.toNamed('/calculator');
+        Navigator.pop(context); // Close the drawer
+      },
     );
   }
 }

@@ -5,6 +5,7 @@ import 'models/project.dart';
 import 'models/team_member.dart';
 import 'models/testimonial.dart';
 import 'models/social_link.dart';
+import 'models/service.dart';
 
 class HomeController extends GetxController {
   // Use your *working* Web App URL + token (same as Postman)
@@ -17,10 +18,12 @@ class HomeController extends GetxController {
   final RxList<TeamMember> teamMembers = <TeamMember>[].obs;
   final RxList<Testimonial> testimonials = <Testimonial>[].obs;
   final RxList<SocialLink> socialLinks = <SocialLink>[].obs;
+  final RxList<Service> services = <Service>[].obs;
   final RxBool isLoading = true.obs;
   final RxBool isLoadingTeams = false.obs;
   final RxBool isLoadingTestimonials = false.obs;
   final RxBool isLoadingSocial = false.obs;
+  final RxBool isLoadingServices = false.obs;
 
   Uri _uri({Map<String, String>? qp}) {
     final params = <String, String>{
@@ -61,6 +64,7 @@ class HomeController extends GetxController {
     fetchTeamMembers();
     fetchTestimonials();
     fetchSocialLinks();
+    fetchServices();
   }
 
   /// Optional: quick backend sanity check (matches Postman /health)
@@ -133,6 +137,21 @@ class HomeController extends GetxController {
       print('Error fetching social links: $e');
     } finally {
       isLoadingSocial.value = false;
+    }
+  }
+
+  Future<void> fetchServices() async {
+    try {
+      isLoadingServices.value = true;
+      final r = await http.get(_uri(qp: {'sheet': 'Services'}));
+      final data = await _decode(r);
+      final list = (data['data'] as List).cast<Map<String, dynamic>>();
+      services.assignAll(list.map(Service.fromJson));
+    } catch (e) {
+      // ignore: avoid_print
+      print('Error fetching services: $e');
+    } finally {
+      isLoadingServices.value = false;
     }
   }
 

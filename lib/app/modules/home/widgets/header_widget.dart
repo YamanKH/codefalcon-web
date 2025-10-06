@@ -23,6 +23,7 @@ class HeaderWidget extends StatelessWidget {
                 NavLink(title: 'home'.tr, sectionKey: 'homeSection'),
                 NavLink(title: 'about'.tr, sectionKey: 'aboutSection'),
                 NavLink(title: 'services'.tr, sectionKey: 'servicesSection'),
+                CalculatorNavLink(title: 'calculator'.tr),
                 NavLink(title: 'projects'.tr, sectionKey: 'projectsSection'),
                 NavLink(title: 'team'.tr, sectionKey: 'teamSection'),
                 NavLink(title: 'contact'.tr, sectionKey: 'contactSection'),
@@ -121,6 +122,24 @@ class NavLink extends StatelessWidget {
       globalKey.currentContext!,
       duration: const Duration(milliseconds: 500),
       curve: Curves.easeInOut,
+    );
+  }
+}
+
+class CalculatorNavLink extends StatelessWidget {
+  final String title;
+
+  const CalculatorNavLink({super.key, required this.title});
+
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(
+      onPressed: () => Get.toNamed('/calculator'),
+      child: Text(
+        title,
+        style: AppTextStyles.bodyText(context)
+            .copyWith(color: Theme.of(context).textTheme.bodyLarge?.color),
+      ),
     );
   }
 }
