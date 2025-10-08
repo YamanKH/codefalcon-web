@@ -30,7 +30,7 @@ class _ContactSectionWidgetState extends State<ContactSectionWidget> {
           SocialLink(id: '3', platform: 'instagram', url: 'https://www.instagram.com/manoooz7/'),
           SocialLink(id: '4', platform: 'tiktok', url: 'https://www.tiktok.com/@manoooz7'),
           SocialLink(id: '5', platform: 'snapchat', url: 'https://www.snapchat.com/add/manoooz7?share_id=VOMvd2JQY40&locale=en-SA'),
-          SocialLink(id: '6', platform: 'whatsapp', url: 'https://wa.me/963954783983'),
+          SocialLink(id: '6', platform: 'whatsapp', url: 'https://wa.me/963982286463'),
         ];
 
         return LayoutBuilder(

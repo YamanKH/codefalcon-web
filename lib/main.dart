@@ -13,6 +13,7 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
   @override
   Widget build(BuildContext context) {
     final themeController = Get.find<ThemeController>();
@@ -21,7 +22,7 @@ class MyApp extends StatelessWidget {
     return Obx(() {
       return GetMaterialApp(
         title: "Code Falcon",
-        initialRoute: AppPages.INITIAL,
+        initialRoute: AppPages.initial,
         getPages: AppPages.routes,
         debugShowCheckedModeBanner: false,
         theme: ThemeController.lightTheme,

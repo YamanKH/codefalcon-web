@@ -112,19 +112,6 @@ class ServicesSectionWidget extends StatelessWidget {
                             childAspectRatio: isSmallScreen ? 1.8 : 1.4,
                             children: buildCards(),
                           ),
-                  const SizedBox(height: 30),
-                  Center(
-                    child: ElevatedButton.icon(
-                      onPressed: () => Get.toNamed('/calculator'),
-                      icon: Icon(Icons.calculate),
-                      label: Text('use_calculator'.tr),
-                      style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                        backgroundColor: AppColors.accentColor,
-                        foregroundColor: AppColors.accentForegroundColor(context),
-                      ),
-                    ),
-                  ),
                 ],
               ),
             );

@@ -9,6 +9,7 @@ import 'widgets/header_widget.dart';
 import 'widgets/hero_section_widget.dart';
 import 'widgets/about_section_widget.dart';
 import 'widgets/services_section_widget.dart';
+import 'widgets/calculator_section_widget.dart';
 import 'widgets/projects_section_widget.dart';
 import 'widgets/technologies_section_widget.dart';
 import 'widgets/team_section_widget.dart';
@@ -17,6 +18,7 @@ import 'widgets/faq_section_widget.dart';
 import 'widgets/contact_section_widget.dart';
 import 'widgets/footer_widget.dart';
 import 'widgets/drawer_widget.dart';
+import 'package:code_falcon/app/routes/app_pages.dart';
 
 class HomeView extends GetView<HomeController> {
   const HomeView({super.key});
@@ -85,19 +87,40 @@ class HomeView extends GetView<HomeController> {
               ),
             ),
           ),
-          floatingActionButton: FloatingActionButton(
-            onPressed: () {
-              scrollController.animateTo(
-                0.0,
-                duration: const Duration(milliseconds: 500),
-                curve: Curves.easeInOut,
-              );
-            },
-            backgroundColor: AppColors.accentColor,
-            child: Icon(
-              Icons.arrow_upward,
-              color: AppColors.accentForegroundColor(context),
-            ),
+          floatingActionButton: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              FloatingActionButton(
+                heroTag: 'calculator',
+                onPressed: () {
+                  Get.toNamed(Routes.calculator);
+                },
+                backgroundColor: AppColors.accentColor,
+                child: Icon(
+                  Icons.calculate,
+                  color: AppColors.accentForegroundColor(context),
+                ),
+                tooltip: 'calculator_title'.tr,
+              ),
+              const SizedBox(height: 16),
+              FloatingActionButton(
+                heroTag: 'scrollTop',
+                onPressed: () {
+                  scrollController.animateTo(
+                    0.0,
+                    duration: const Duration(milliseconds: 500),
+                    curve: Curves.easeInOut,
+                  );
+                },
+                backgroundColor: AppColors.accentColor,
+                child: Icon(
+                  Icons.arrow_upward,
+                  color: AppColors.accentForegroundColor(context),
+                ),
+                tooltip: 'Scroll to top',
+              ),
+            ],
           ),
           drawer: const DrawerWidget(),
         ),

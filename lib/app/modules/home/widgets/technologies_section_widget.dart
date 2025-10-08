@@ -147,29 +147,38 @@ class TechnologyCard extends StatelessWidget {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       child: Padding(
         padding: EdgeInsets.all(isSmallScreen ? 15 : 20),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            FaIcon(icon, size: isSmallScreen ? 30 : 40, color: color),
-            SizedBox(height: isSmallScreen ? 8 : 10),
-            Text(
-              nameKey.tr,
-              textAlign: TextAlign.center,
-              style: AppTextStyles.bodyText(context).copyWith(
-                fontWeight: FontWeight.bold,
-                color: AppColors.textColor(context),
+        child: SizedBox(
+          height: isSmallScreen ? 120 : 140,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              FaIcon(icon, size: isSmallScreen ? 30 : 40, color: color),
+              SizedBox(height: isSmallScreen ? 8 : 10),
+              Flexible(
+                child: Text(
+                  nameKey.tr,
+                  textAlign: TextAlign.center,
+                  style: AppTextStyles.bodyText(context).copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.textColor(context),
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
               ),
-            ),
-            SizedBox(height: isSmallScreen ? 4 : 6),
-            Text(
-              descriptionKey.tr,
-              textAlign: TextAlign.center,
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-              style: AppTextStyles.bodyText(context)
-                  .copyWith(color: AppColors.secondaryTextColor(context), fontSize: isSmallScreen ? 12 : 14),
-            ),
-          ],
+              SizedBox(height: isSmallScreen ? 4 : 6),
+              Flexible(
+                child: Text(
+                  descriptionKey.tr,
+                  textAlign: TextAlign.center,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: AppTextStyles.bodyText(context)
+                      .copyWith(color: AppColors.secondaryTextColor(context), fontSize: isSmallScreen ? 12 : 14),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
