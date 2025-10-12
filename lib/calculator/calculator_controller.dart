@@ -2,10 +2,9 @@ import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/foundation.dart';
-import 'dart:io';
 import 'package:code_falcon/app/modules/home/locale_controller.dart';
 
-class ProjectCategory {
+class Platform {
   final String id;
   final String nameEn;
   final String nameAr;
@@ -13,7 +12,7 @@ class ProjectCategory {
   final String descriptionAr;
   final IconData icon;
 
-  ProjectCategory({
+  Platform({
     required this.id,
     required this.nameEn,
     required this.nameAr,
@@ -23,15 +22,85 @@ class ProjectCategory {
   });
 }
 
-class TechStack {
+class Technology {
+  final String id;
+  final String nameEn;
+  final String nameAr;
+  final IconData icon;
+  final double basePrice;
+
+  Technology({
+    required this.id,
+    required this.nameEn,
+    required this.nameAr,
+    required this.icon,
+    required this.basePrice,
+  });
+
+  String get name => nameEn; // For backward compatibility
+}
+
+class Feature {
+  final String id;
+  final String nameEn;
+  final String nameAr;
+  final String descriptionEn;
+  final String descriptionAr;
+  final double basePrice;
+
+  Feature({
+    required this.id,
+    required this.nameEn,
+    required this.nameAr,
+    required this.descriptionEn,
+    required this.descriptionAr,
+    required this.basePrice,
+  });
+}
+
+class BackendType {
   final String id;
   final String name;
-  final String type; // 'frontend', 'backend', 'database'
+  final IconData icon;
 
-  TechStack({
+  BackendType({
     required this.id,
     required this.name,
-    required this.type,
+    required this.icon,
+  });
+}
+
+class DatabaseType {
+  final String id;
+  final String name;
+  final IconData icon;
+
+  DatabaseType({
+    required this.id,
+    required this.name,
+    required this.icon,
+  });
+}
+
+class AdditionalService {
+  final String id;
+  final String nameEn;
+  final String nameAr;
+  final String descriptionEn;
+  final String descriptionAr;
+  final double price;
+  final IconData icon;
+  final Color color;
+
+  AdditionalService({
+    required this.id,
+    required this.nameEn,
+    required this.nameAr,
+    required this.descriptionEn,
+    required this.descriptionAr,
+    required this.price,
+    required this.icon,
+    required this.color,
   });
 }
 
@@ -41,10 +110,14 @@ class PackageTier {
   final String nameAr;
   final String descriptionEn;
   final String descriptionAr;
-  final double basePrice;
+  final double multiplier; // Multiplier for base price
   final List<String> featuresEn;
   final List<String> featuresAr;
   final Color color;
+  final bool includesHosting;
+  final bool includesDomain;
+  final bool includesSSL;
+  final bool includesMaintenance;
 
   PackageTier({
     required this.id,
@@ -52,232 +125,297 @@ class PackageTier {
     required this.nameAr,
     required this.descriptionEn,
     required this.descriptionAr,
-    required this.basePrice,
+    required this.multiplier,
     required this.featuresEn,
     required this.featuresAr,
     required this.color,
+    required this.includesHosting,
+    required this.includesDomain,
+    required this.includesSSL,
+    required this.includesMaintenance,
   });
 }
 
-final List<ProjectCategory> projectCategories = [
-  ProjectCategory(
-    id: 'real_estate',
-    nameEn: 'Real Estate App',
-    nameAr: 'تطبيق العقارات',
-    descriptionEn: 'Property listings, search, and management system',
-    descriptionAr: 'قوائم العقارات والبحث ونظام الإدارة',
-    icon: Icons.home,
+final List<Platform> platforms = [
+  Platform(
+    id: 'website',
+    nameEn: 'Website',
+    nameAr: 'موقع إلكتروني',
+    descriptionEn: 'Responsive web application',
+    descriptionAr: 'تطبيق ويب متجاوب',
+    icon: Icons.web,
   ),
-  ProjectCategory(
-    id: 'ecommerce',
-    nameEn: 'E-commerce App',
-    nameAr: 'تطبيق التجارة الإلكترونية',
-    descriptionEn: 'Online store with payment integration',
-    descriptionAr: 'متجر إلكتروني مع دمج الدفع',
-    icon: Icons.shopping_cart,
+  Platform(
+    id: 'mobile',
+    nameEn: 'Mobile App',
+    nameAr: 'تطبيق موبايل',
+    descriptionEn: 'Native mobile application',
+    descriptionAr: 'تطبيق موبايل أصلي',
+    icon: Icons.phone_android,
   ),
-  ProjectCategory(
-    id: 'restaurant',
-    nameEn: 'Restaurant App',
-    nameAr: 'تطبيق المطاعم',
-    descriptionEn: 'Food ordering and delivery management',
-    descriptionAr: 'طلب الطعام وإدارة التوصيل',
-    icon: Icons.restaurant,
-  ),
-  ProjectCategory(
-    id: 'healthcare',
-    nameEn: 'Healthcare App',
-    nameAr: 'تطبيق الرعاية الصحية',
-    descriptionEn: 'Medical records and appointment booking',
-    descriptionAr: 'السجلات الطبية وحجز المواعيد',
-    icon: Icons.local_hospital,
-  ),
-  ProjectCategory(
-    id: 'education',
-    nameEn: 'Education Platform',
-    nameAr: 'منصة التعليم',
-    descriptionEn: 'Learning management and course delivery',
-    descriptionAr: 'إدارة التعلم وتوصيل الدورات',
-    icon: Icons.school,
-  ),
-  ProjectCategory(
-    id: 'other',
-    nameEn: 'Other/Custom App',
-    nameAr: 'تطبيق آخر/مخصص',
-    descriptionEn: 'Custom application for your specific needs',
-    descriptionAr: 'تطبيق مخصص لاحتياجاتك الخاصة',
-    icon: Icons.apps,
+  Platform(
+    id: 'both',
+    nameEn: 'Website + Mobile',
+    nameAr: 'موقع + موبايل',
+    descriptionEn: 'Web and mobile application',
+    descriptionAr: 'تطبيق ويب وموبايل',
+    icon: Icons.devices,
   ),
 ];
 
-final List<TechStack> techStacks = [
-  // Frontend
-  TechStack(id: 'flutter', name: 'Flutter', type: 'frontend'),
-  TechStack(id: 'react', name: 'React', type: 'frontend'),
-  TechStack(id: 'vue', name: 'Vue.js', type: 'frontend'),
-  TechStack(id: 'angular', name: 'Angular', type: 'frontend'),
+final List<Technology> technologies = [
+  Technology(
+    id: 'flutter',
+    nameEn: 'Flutter',
+    nameAr: 'فلاتر',
+    icon: Icons.flutter_dash,
+    basePrice: 0.0, // Base price included
+  ),
+  Technology(
+    id: 'react',
+    nameEn: 'React',
+    nameAr: 'ريأكت',
+    icon: Icons.code,
+    basePrice: 200.0, // Premium for React
+  ),
+];
 
-  // Backend
-  TechStack(id: 'nodejs', name: 'Node.js', type: 'backend'),
-  TechStack(id: 'firebase', name: 'Firebase', type: 'backend'),
-  TechStack(id: 'supabase', name: 'Supabase', type: 'backend'),
-  TechStack(id: 'python', name: 'Python', type: 'backend'),
-  TechStack(id: 'django', name: 'Django', type: 'backend'),
-  TechStack(id: 'php', name: 'PHP', type: 'backend'),
-  TechStack(id: 'laravel', name: 'Laravel', type: 'backend'),
+final List<Feature> features = [
+  Feature(
+    id: 'login',
+    nameEn: 'Login Screen',
+    nameAr: 'شاشة تسجيل الدخول',
+    descriptionEn: 'User authentication screen',
+    descriptionAr: 'شاشة مصادقة المستخدم',
+    basePrice: 100,
+  ),
+  Feature(
+    id: 'signup',
+    nameEn: 'Sign Up Screen',
+    nameAr: 'شاشة التسجيل',
+    descriptionEn: 'User registration screen',
+    descriptionAr: 'شاشة تسجيل المستخدم',
+    basePrice: 100,
+  ),
+  Feature(
+    id: 'profile',
+    nameEn: 'User Profile',
+    nameAr: 'الملف الشخصي',
+    descriptionEn: 'User profile management',
+    descriptionAr: 'إدارة الملف الشخصي',
+    basePrice: 150,
+  ),
+  Feature(
+    id: 'dashboard',
+    nameEn: 'Dashboard',
+    nameAr: 'لوحة التحكم',
+    descriptionEn: 'Main dashboard screen',
+    descriptionAr: 'شاشة لوحة التحكم الرئيسية',
+    basePrice: 200,
+  ),
+  Feature(
+    id: 'settings',
+    nameEn: 'Settings',
+    nameAr: 'الإعدادات',
+    descriptionEn: 'App settings screen',
+    descriptionAr: 'شاشة إعدادات التطبيق',
+    basePrice: 100,
+  ),
+  Feature(
+    id: 'notifications',
+    nameEn: 'Notifications',
+    nameAr: 'الإشعارات',
+    descriptionEn: 'Push notifications system',
+    descriptionAr: 'نظام الإشعارات الدفعية',
+    basePrice: 200,
+  ),
+];
 
-  // Database
-  TechStack(id: 'firebase_db', name: 'Firebase', type: 'database'),
-  TechStack(id: 'supabase_db', name: 'Supabase', type: 'database'),
-  TechStack(id: 'mongodb', name: 'MongoDB', type: 'database'),
-  TechStack(id: 'mysql', name: 'MySQL', type: 'database'),
-  TechStack(id: 'postgresql', name: 'PostgreSQL', type: 'database'),
+final List<BackendType> backendTypes = [
+  BackendType(id: 'firebase', name: 'Firebase', icon: Icons.cloud),
+  BackendType(id: 'nodejs', name: 'Node.js', icon: Icons.code),
+  BackendType(id: 'python', name: 'Python', icon: Icons.code),
+];
+
+final List<DatabaseType> databaseTypes = [
+  DatabaseType(id: 'firestore', name: 'Firestore', icon: Icons.storage),
+  DatabaseType(id: 'mongodb', name: 'MongoDB', icon: Icons.storage),
+  DatabaseType(id: 'mysql', name: 'MySQL', icon: Icons.storage),
+  DatabaseType(id: 'postgresql', name: 'PostgreSQL', icon: Icons.storage),
+];
+
+final List<AdditionalService> additionalServices = [
+  AdditionalService(
+    id: 'brand_identity',
+    nameEn: 'Brand Identity Design',
+    nameAr: 'تصميم الهوية البصرية',
+    descriptionEn: 'Logo, color scheme, typography, and brand guidelines',
+    descriptionAr: 'شعار، نظام ألوان، خطوط، وإرشادات العلامة التجارية',
+    price: 150.0,
+    icon: Icons.palette,
+    color: Colors.purple,
+  ),
+  AdditionalService(
+    id: 'team_structure',
+    nameEn: 'Team Structure Planning',
+    nameAr: 'تخطيط هيكل الفريق',
+    descriptionEn: 'Project management and team organization setup',
+    descriptionAr: 'إدارة المشروع وإعداد تنظيم الفريق',
+    price: 100.0,
+    icon: Icons.group,
+    color: Colors.blue,
+  ),
+  AdditionalService(
+    id: 'seo_optimization',
+    nameEn: 'SEO Optimization',
+    nameAr: 'تحسين محركات البحث',
+    descriptionEn: 'Search engine optimization for better visibility',
+    descriptionAr: 'تحسين محركات البحث لزيادة الظهور',
+    price: 120.0,
+    icon: Icons.search,
+    color: Colors.green,
+  ),
+  AdditionalService(
+    id: 'analytics_setup',
+    nameEn: 'Analytics Setup',
+    nameAr: 'إعداد التحليلات',
+    descriptionEn: 'Google Analytics and performance monitoring',
+    descriptionAr: 'تحليلات جوجل ومراقبة الأداء',
+    price: 80.0,
+    icon: Icons.analytics,
+    color: Colors.orange,
+  ),
+  AdditionalService(
+    id: 'maintenance_plan',
+    nameEn: 'Maintenance Plan',
+    nameAr: 'خطة الصيانة',
+    descriptionEn: '6 months of ongoing maintenance and updates',
+    descriptionAr: '6 أشهر من الصيانة المستمرة والتحديثات',
+    price: 200.0,
+    icon: Icons.build,
+    color: Colors.red,
+  ),
 ];
 
 final List<PackageTier> packageTiers = [
   PackageTier(
     id: 'basic',
-    nameEn: 'Starter Package',
-    nameAr: 'باقة البداية',
-    descriptionEn: 'Perfect for small businesses and startups',
-    descriptionAr: 'مثالي للشركات الصغيرة والشركات الناشئة',
-    basePrice: 800.0,
+    nameEn: 'Basic Package',
+    nameAr: 'الباقة الأساسية',
+    descriptionEn: 'Essential features for simple applications',
+    descriptionAr: 'الميزات الأساسية للتطبيقات البسيطة',
+    multiplier: 1.0,
     featuresEn: [
-      'Modern UI/UX Design',
+      'Basic UI Design',
       'User Authentication',
-      'Basic Database Setup',
-      'Mobile Responsive',
-      'Email Notifications',
+      'Simple Database',
+      'Responsive Design',
       'Basic Testing',
       '1 Month Support',
-      'Source Code Delivery'
+      'Shared Hosting',
+      'Basic SSL Certificate'
+    ],
+    featuresAr: [
+      'تصميم واجهة أساسي',
+      'مصادقة المستخدم',
+      'قاعدة بيانات بسيطة',
+      'تصميم متجاوب',
+      'اختبار أساسي',
+      'دعم لمدة شهر',
+      'استضافة مشتركة',
+      'شهادة SSL أساسية'
+    ],
+    color: Colors.blue,
+    includesHosting: true,
+    includesDomain: true,
+    includesSSL: true,
+    includesMaintenance: false,
+  ),
+  PackageTier(
+    id: 'medium',
+    nameEn: 'Medium Package',
+    nameAr: 'الباقة المتوسطة',
+    descriptionEn: 'Advanced features for growing applications',
+    descriptionAr: 'ميزات متقدمة للتطبيقات المتنامية',
+    multiplier: 1.5,
+    featuresEn: [
+      'Modern UI/UX Design',
+      'Advanced Authentication',
+      'Complex Database',
+      'Push Notifications',
+      'API Integration',
+      'Admin Panel',
+      'Performance Optimization',
+      '3 Months Support',
+      'VPS Hosting',
+      'Domain Registration',
+      'SSL Certificate',
+      'Monthly Backups'
     ],
     featuresAr: [
       'تصميم واجهة حديث',
-      'مصادقة المستخدم',
-      'إعداد قاعدة بيانات أساسية',
-      'متجاوب مع الموبايل',
-      'إشعارات البريد الإلكتروني',
-      'اختبار أساسي',
-      'دعم لمدة شهر',
-      'تسليم الكود المصدري'
+      'مصادقة متقدمة',
+      'قاعدة بيانات معقدة',
+      'إشعارات الدفع',
+      'تكامل واجهات برمجة التطبيقات',
+      'لوحة الإدارة',
+      'تحسين الأداء',
+      'دعم لمدة 3 أشهر',
+      'استضافة VPS',
+      'تسجيل النطاق',
+      'شهادة SSL',
+      'نسخ احتياطي شهري'
     ],
-    color: Colors.blue,
+    color: Colors.green,
+    includesHosting: true,
+    includesDomain: true,
+    includesSSL: true,
+    includesMaintenance: false,
   ),
   PackageTier(
-    id: 'professional',
-    nameEn: 'Professional Package',
-    nameAr: 'الباقة المهنية',
-    descriptionEn: 'Advanced features for growing businesses',
-    descriptionAr: 'ميزات متقدمة للشركات المتنامية',
-    basePrice: 1500.0,
+    id: 'advanced',
+    nameEn: 'Advanced Package',
+    nameAr: 'الباقة المتقدمة',
+    descriptionEn: 'Complete solution with premium features',
+    descriptionAr: 'حل كامل مع ميزات مميزة',
+    multiplier: 2.0,
     featuresEn: [
       'Premium UI/UX Design',
-      'Advanced Authentication',
-      'Complex Database Design',
-      'Push Notifications',
-      'SMS Integration',
-      'Social Media Login',
-      'Payment Gateway',
-      'Admin Dashboard',
-      'API Development',
-      'Performance Optimization',
-      '3 Months Support',
-      'Deployment Setup'
+      'Multi-role Authentication',
+      'Advanced Database Architecture',
+      'Real-time Features',
+      'Third-party Integrations',
+      'Analytics Dashboard',
+      'Security Features',
+      'Cloud Deployment',
+      '6 Months Support',
+      'Training Included',
+      'Dedicated Hosting',
+      'Domain + SSL',
+      'Daily Backups',
+      '24/7 Monitoring'
     ],
     featuresAr: [
       'تصميم واجهة مميز',
-      'مصادقة متقدمة',
-      'تصميم قاعدة بيانات معقدة',
-      'إشعارات الدفع',
-      'تكامل الرسائل النصية',
-      'تسجيل الدخول عبر وسائل التواصل',
-      'بوابة الدفع',
-      'لوحة تحكم الإدارة',
-      'تطوير واجهات برمجة التطبيقات',
-      'تحسين الأداء',
-      'دعم لمدة 3 أشهر',
-      'إعداد النشر'
-    ],
-    color: Colors.green,
-  ),
-  PackageTier(
-    id: 'enterprise',
-    nameEn: 'Enterprise Package',
-    nameAr: 'الباقة المؤسسية',
-    descriptionEn: 'Complete solution with advanced integrations',
-    descriptionAr: 'حل كامل مع تكاملات متقدمة',
-    basePrice: 2500.0,
-    featuresEn: [
-      'Custom Enterprise Design',
-      'Multi-role Authentication',
-      'Advanced Database Architecture',
-      'Real-time Notifications',
-      'SMS & Email Campaigns',
-      'Multi-platform Social Login',
-      'Advanced Payment Systems',
-      'Analytics Dashboard',
-      'RESTful APIs & Webhooks',
-      'Advanced Security',
-      'Cloud Deployment',
-      '6 Months Support',
-      'Training Sessions',
-      'Maintenance Package'
-    ],
-    featuresAr: [
-      'تصميم مؤسسي مخصص',
       'مصادقة متعددة الأدوار',
       'هيكل قاعدة بيانات متقدم',
-      'إشعارات في الوقت الفعلي',
-      'حملات الرسائل النصية والبريد الإلكتروني',
-      'تسجيل دخول متعدد المنصات',
-      'أنظمة دفع متقدمة',
-      'لوحة تحليلات البيانات',
-      'واجهات برمجة التطبيقات وخطافات الويب',
-      'أمان متقدم',
+      'ميزات في الوقت الفعلي',
+      'تكاملات خارجية',
+      'لوحة التحليلات',
+      'ميزات الأمان',
       'نشر سحابي',
       'دعم لمدة 6 أشهر',
-      'جلسات تدريبية',
-      'باقة الصيانة'
+      'تدريب شامل',
+      'استضافة مخصصة',
+      'نطاق + SSL',
+      'نسخ احتياطي يومي',
+      'مراقبة 24/7'
     ],
     color: Colors.purple,
-  ),
-  PackageTier(
-    id: 'custom',
-    nameEn: 'Custom Solution',
-    nameAr: 'حل مخصص',
-    descriptionEn: 'Tailored development for unique requirements',
-    descriptionAr: 'تطوير مخصص للمتطلبات الفريدة',
-    basePrice: 3000.0,
-    featuresEn: [
-      'Fully Custom Development',
-      'Unique UI/UX Design',
-      'Custom Architecture',
-      'Advanced Integrations',
-      'Third-party API Integration',
-      'Custom Features Development',
-      'Scalability Planning',
-      'Security Audit',
-      'Performance Monitoring',
-      '12 Months Support',
-      'On-site Training',
-      'Maintenance & Updates'
-    ],
-    featuresAr: [
-      'تطوير مخصص بالكامل',
-      'تصميم واجهة فريد',
-      'هيكل مخصص',
-      'تكاملات متقدمة',
-      'تكامل واجهات برمجة التطبيقات الخارجية',
-      'تطوير ميزات مخصصة',
-      'تخطيط قابلية التوسع',
-      'تدقيق الأمان',
-      'مراقبة الأداء',
-      'دعم لمدة 12 شهر',
-      'تدريب في الموقع',
-      'الصيانة والتحديثات'
-    ],
-    color: Colors.orange,
+    includesHosting: true,
+    includesDomain: true,
+    includesSSL: true,
+    includesMaintenance: true,
   ),
 ];
 
@@ -286,11 +424,13 @@ class CalculatorController extends GetxController {
   var currentStep = 0.obs;
 
   // Selection variables
-  var selectedCategory = RxnString();
-  var selectedFrontend = RxnString();
+  var selectedPlatform = RxnString();
+  var selectedTechnology = RxnString();
   var selectedBackend = RxnString();
   var selectedDatabase = RxnString();
-  var selectedTier = RxnString();
+  var selectedPackage = RxnString();
+  var selectedAdditionalServices = <String>[].obs;
+  var numberOfScreens = 1.obs;
 
   // GetX controllers
   final localeController = Get.find<LocaleController>();
@@ -299,51 +439,89 @@ class CalculatorController extends GetxController {
   bool get isArabic => localeController.isArabic;
 
   double get totalPrice {
-    if (selectedTier.value == null) return 0.0;
+    if (selectedPackage.value == null) return 0.0;
 
-    final tier = packageTiers.firstWhere((t) => t.id == selectedTier.value);
-    double price = tier.basePrice;
+    final package = packageTiers.firstWhere((p) => p.id == selectedPackage.value);
 
-    // Add premium for custom tech stack combinations
-    if (selectedFrontend.value != null && selectedBackend.value != null && selectedDatabase.value != null) {
-      // If user selects different from default combinations, add premium
-      if (!(selectedFrontend.value == 'flutter' && (selectedBackend.value == 'firebase' || selectedBackend.value == 'supabase'))) {
-        price += 200; // Premium for custom stack
-      }
-    }
+    // Base price depends on platform
+    double basePrice = 200.0; // Default for website
+    if (selectedPlatform.value == 'mobile') basePrice = 300.0;
+    else if (selectedPlatform.value == 'both') basePrice = 500.0;
 
-    return price;
+    // Add technology cost
+    double techCost = selectedTechnologyData?.basePrice ?? 0.0;
+
+    // Add screens cost (each screen costs $30, first 2 are free)
+    double screensCost = numberOfScreens.value > 2 ? (numberOfScreens.value - 2) * 30.0 : 0.0;
+
+    // Add backend cost
+    double backendCost = selectedBackendData != null ? 200.0 : 0.0;
+
+    // Add database cost
+    double databaseCost = selectedDatabaseData != null ? 150.0 : 0.0;
+
+    // Add additional services cost
+    double additionalServicesCost = selectedAdditionalServicesData.fold(0.0, (sum, service) => sum + service.price);
+
+    // Calculate subtotal
+    double subtotal = basePrice + techCost + screensCost + backendCost + databaseCost;
+
+    // Apply package multiplier
+    double total = subtotal * package.multiplier + additionalServicesCost;
+
+    return total;
+  }
+
+  double get subtotalPrice {
+    if (selectedPackage.value == null) return 0.0;
+
+    // Base price depends on platform
+    double basePrice = 200.0; // Default for website
+    if (selectedPlatform.value == 'mobile') basePrice = 300.0;
+    else if (selectedPlatform.value == 'both') basePrice = 500.0;
+
+    double techCost = selectedTechnologyData?.basePrice ?? 0.0;
+    double screensCost = numberOfScreens.value > 2 ? (numberOfScreens.value - 2) * 30.0 : 0.0;
+    double backendCost = selectedBackendData != null ? 200.0 : 0.0;
+    double databaseCost = selectedDatabaseData != null ? 150.0 : 0.0;
+
+    return basePrice + techCost + screensCost + backendCost + databaseCost;
   }
 
   // Helper methods for UI
-  ProjectCategory? get selectedCategoryData {
-    if (selectedCategory.value == null) return null;
-    return projectCategories.firstWhere((c) => c.id == selectedCategory.value);
+  Platform? get selectedPlatformData {
+    if (selectedPlatform.value == null) return null;
+    return platforms.firstWhere((p) => p.id == selectedPlatform.value);
   }
 
-  TechStack? get selectedFrontendData {
-    if (selectedFrontend.value == null) return null;
-    return techStacks.firstWhere((t) => t.id == selectedFrontend.value);
+  Technology? get selectedTechnologyData {
+    if (selectedTechnology.value == null) return null;
+    return technologies.firstWhere((t) => t.id == selectedTechnology.value);
   }
 
-  TechStack? get selectedBackendData {
+  BackendType? get selectedBackendData {
     if (selectedBackend.value == null) return null;
-    return techStacks.firstWhere((t) => t.id == selectedBackend.value);
+    return backendTypes.firstWhere((b) => b.id == selectedBackend.value);
   }
 
-  TechStack? get selectedDatabaseData {
+  DatabaseType? get selectedDatabaseData {
     if (selectedDatabase.value == null) return null;
-    return techStacks.firstWhere((t) => t.id == selectedDatabase.value);
+    return databaseTypes.firstWhere((d) => d.id == selectedDatabase.value);
   }
 
-  PackageTier? get selectedTierData {
-    if (selectedTier.value == null) return null;
-    return packageTiers.firstWhere((t) => t.id == selectedTier.value);
+  PackageTier? get selectedPackageData {
+    if (selectedPackage.value == null) return null;
+    return packageTiers.firstWhere((p) => p.id == selectedPackage.value);
+  }
+
+
+  List<AdditionalService> get selectedAdditionalServicesData {
+    return additionalServices.where((s) => selectedAdditionalServices.contains(s.id)).toList();
   }
 
   // Methods
   void nextStep() {
-    if (currentStep.value < 3) {
+    if (currentStep.value < 6) {
       currentStep.value++;
       update();
     }
@@ -356,13 +534,14 @@ class CalculatorController extends GetxController {
     }
   }
 
-  void selectCategory(String? categoryId) {
-    selectedCategory.value = categoryId;
+  void selectPlatform(String? platformId) {
+    selectedPlatform.value = platformId;
   }
 
-  void selectFrontend(String? frontendId) {
-    selectedFrontend.value = frontendId;
+  void selectTechnology(String? technologyId) {
+    selectedTechnology.value = technologyId;
   }
+
 
   void selectBackend(String? backendId) {
     selectedBackend.value = backendId;
@@ -372,51 +551,57 @@ class CalculatorController extends GetxController {
     selectedDatabase.value = databaseId;
   }
 
-  void selectTier(String? tierId) {
-    selectedTier.value = tierId;
+  void selectPackage(String? packageId) {
+    selectedPackage.value = packageId;
+  }
+
+  void toggleAdditionalService(String serviceId) {
+    if (selectedAdditionalServices.contains(serviceId)) {
+      selectedAdditionalServices.remove(serviceId);
+    } else {
+      selectedAdditionalServices.add(serviceId);
+    }
+  }
+
+  void setNumberOfScreens(int screens) {
+    numberOfScreens.value = screens.clamp(1, 50); // Min 1, max 50
   }
 
   void showQuoteSubmitted() async {
     String message = 'Hello! I would like to request a quote for my project.\n\n';
 
-    if (selectedCategoryData != null) {
-      message += 'Project Type: ${selectedCategoryData!.nameEn}\n';
+    if (selectedPlatformData != null) {
+      message += 'Platform: ${selectedPlatformData!.nameEn}\n';
     }
-    if (selectedFrontendData != null) {
-      message += 'Frontend: ${selectedFrontendData!.name}\n';
+    if (selectedTechnologyData != null) {
+      message += 'Technology: ${selectedTechnologyData!.nameEn}\n';
     }
+    message += 'Number of Screens: ${numberOfScreens.value}\n';
     if (selectedBackendData != null) {
       message += 'Backend: ${selectedBackendData!.name}\n';
     }
     if (selectedDatabaseData != null) {
       message += 'Database: ${selectedDatabaseData!.name}\n';
     }
-    if (selectedTierData != null) {
-      message += 'Package: ${selectedTierData!.nameEn}\n';
+    if (selectedPackageData != null) {
+      message += 'Package: ${selectedPackageData!.nameEn}\n';
     }
+    if (selectedAdditionalServicesData.isNotEmpty) {
+      message += 'Additional Services: ${selectedAdditionalServicesData.map((s) => s.nameEn).join(', ')}\n';
+    }
+    message += 'Subtotal: \$${subtotalPrice.toStringAsFixed(0)}\n';
     message += 'Total Price: \$${totalPrice.toStringAsFixed(0)}\n\n';
     message += 'Please contact me for more details.';
 
     String phone = '00963982286463';
-    Uri whatsappUrl;
-
-    if (kIsWeb) {
-      // For web, use wa.me
-      whatsappUrl = Uri.parse('https://wa.me/$phone?text=${Uri.encodeComponent(message)}');
-    } else if (Platform.isAndroid || Platform.isIOS) {
-      // For mobile, use whatsapp://
-      whatsappUrl = Uri.parse('whatsapp://send?phone=$phone&text=${Uri.encodeComponent(message)}');
-    } else {
-      // Fallback
-      whatsappUrl = Uri.parse('https://wa.me/$phone?text=${Uri.encodeComponent(message)}');
-    }
+    Uri whatsappUrl = Uri.parse('https://wa.me/$phone?text=${Uri.encodeComponent(message)}');
 
     if (await canLaunchUrl(whatsappUrl)) {
       await launchUrl(whatsappUrl, mode: LaunchMode.externalApplication);
     } else {
       Get.snackbar(
-        'error'.tr,
-        'unable_to_open_whatsapp'.tr,
+        'Error',
+        'Unable to open WhatsApp',
         snackPosition: SnackPosition.BOTTOM,
         backgroundColor: Colors.red,
         colorText: Colors.white,
@@ -435,13 +620,13 @@ class CalculatorController extends GetxController {
   }
 
   void showWhatsAppContact() async {
-    final Uri whatsappUrl = Uri.parse('whatsapp://send?phone=00963982286463');
+    final Uri whatsappUrl = Uri.parse('https://wa.me/00963982286463');
     if (await canLaunchUrl(whatsappUrl)) {
-      await launchUrl(whatsappUrl);
+      await launchUrl(whatsappUrl, mode: LaunchMode.externalApplication);
     } else {
       Get.snackbar(
         'error'.tr,
-        'whatsapp_not_installed'.tr,
+        'whatsapp_not_available'.tr,
         snackPosition: SnackPosition.BOTTOM,
         backgroundColor: Colors.red,
         colorText: Colors.white,
