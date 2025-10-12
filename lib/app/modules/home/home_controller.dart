@@ -81,9 +81,10 @@ class HomeController extends GetxController {
   }
 
   Future<void> fetchProjects({String? q}) async {
+    final stopwatch = Stopwatch()..start();
     try {
       isLoading.value = true;
-      final r = await http.get(_uri(qp: {if (q != null && q.isNotEmpty) 'q': q}));
+      final r = await http.get(_uri(qp: {'sheet': 'Projects', if (q != null && q.isNotEmpty) 'q': q}));
       final data = await _decode(r);
       final list = (data['data'] as List).cast<Map<String, dynamic>>();
       projects.assignAll(list.map(Project.fromJson));
@@ -92,13 +93,17 @@ class HomeController extends GetxController {
       print('Error fetching projects: $e');
     } finally {
       isLoading.value = false;
+      stopwatch.stop();
+      // ignore: avoid_print
+      print('fetchProjects took ${stopwatch.elapsedMilliseconds} ms');
     }
   }
 
   Future<void> fetchTeamMembers() async {
+    final stopwatch = Stopwatch()..start();
     try {
       isLoadingTeams.value = true;
-      final r = await http.get(_uri(qp: {'sheet': 'Teams'}));
+      final r = await http.get(_uri(qp: {'sheet': 'Team'}));
       final data = await _decode(r);
       final list = (data['data'] as List).cast<Map<String, dynamic>>();
       teamMembers.assignAll(list.map(TeamMember.fromJson));
@@ -107,10 +112,14 @@ class HomeController extends GetxController {
       print('Error fetching team members: $e');
     } finally {
       isLoadingTeams.value = false;
+      stopwatch.stop();
+      // ignore: avoid_print
+      print('fetchTeamMembers took ${stopwatch.elapsedMilliseconds} ms');
     }
   }
 
   Future<void> fetchTestimonials() async {
+    final stopwatch = Stopwatch()..start();
     try {
       isLoadingTestimonials.value = true;
       final r = await http.get(_uri(qp: {'sheet': 'Testimonials'}));
@@ -122,10 +131,14 @@ class HomeController extends GetxController {
       print('Error fetching testimonials: $e');
     } finally {
       isLoadingTestimonials.value = false;
+      stopwatch.stop();
+      // ignore: avoid_print
+      print('fetchTestimonials took ${stopwatch.elapsedMilliseconds} ms');
     }
   }
 
   Future<void> fetchSocialLinks() async {
+    final stopwatch = Stopwatch()..start();
     try {
       isLoadingSocial.value = true;
       final r = await http.get(_uri(qp: {'sheet': 'Social'}));
@@ -137,10 +150,14 @@ class HomeController extends GetxController {
       print('Error fetching social links: $e');
     } finally {
       isLoadingSocial.value = false;
+      stopwatch.stop();
+      // ignore: avoid_print
+      print('fetchSocialLinks took ${stopwatch.elapsedMilliseconds} ms');
     }
   }
 
   Future<void> fetchServices() async {
+    final stopwatch = Stopwatch()..start();
     try {
       isLoadingServices.value = true;
       final r = await http.get(_uri(qp: {'sheet': 'Services'}));
@@ -152,6 +169,9 @@ class HomeController extends GetxController {
       print('Error fetching services: $e');
     } finally {
       isLoadingServices.value = false;
+      stopwatch.stop();
+      // ignore: avoid_print
+      print('fetchServices took ${stopwatch.elapsedMilliseconds} ms');
     }
   }
 

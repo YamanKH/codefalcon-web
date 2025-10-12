@@ -81,32 +81,12 @@ class CalculatorHomePage extends StatelessWidget {
                 ),
               ],
             ),
-            floatingActionButton: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                FloatingActionButton(
-                  heroTag: 'consulting',
-                  onPressed: controller.showConsultingComingSoon,
-                  child: Icon(Icons.calendar_today),
-                  tooltip: 'book_consulting'.tr,
-                ),
-                SizedBox(height: 16),
-                FloatingActionButton(
-                  heroTag: 'whatsapp',
-                  onPressed: controller.showWhatsAppContact,
-                  backgroundColor: Colors.green,
-                  child: Icon(Icons.message),
-                  tooltip: 'contact_whatsapp'.tr,
-                ),
-                SizedBox(height: 16),
-                FloatingActionButton(
-                  heroTag: 'premade',
-                  onPressed: controller.showPreMadeProjectsComingSoon,
-                  backgroundColor: Colors.orange,
-                  child: Icon(Icons.inventory),
-                  tooltip: 'premade_projects'.tr,
-                ),
-              ],
+            floatingActionButton: FloatingActionButton(
+              heroTag: 'whatsapp',
+              onPressed: controller.showWhatsAppContact,
+              backgroundColor: Colors.green,
+              child: Icon(Icons.message),
+              tooltip: 'contact_whatsapp'.tr,
             ),
           ),
         );

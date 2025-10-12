@@ -202,6 +202,9 @@ class SocialIcon extends StatelessWidget {
       case 'whatsapp':
         iconData = FontAwesomeIcons.whatsapp;
         break;
+      case 'facebook':
+        iconData = FontAwesomeIcons.facebook;
+        break;
       default:
         iconData = Icons.link;
     }

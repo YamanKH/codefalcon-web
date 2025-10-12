@@ -7,3 +7,9 @@ Flutter web + mobile application for Code Falcon. This repository contains the s
 
 Happy coding! ✨
 
+git init
+git add README.md
+git commit -m "first commit"
+git branch -M main
+git remote add origin https://github.com/YamanKH/code_falcon_website.git
+git push -u origin main

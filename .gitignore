@@ -52,3 +52,10 @@ coverage/
 
 # Exceptions to above rules.
 !/packages/flutter_tools/test/data/dart_dependencies_test/**/.packages
+CodeFalcon_Projects/Config.html
+CodeFalcon_Projects/Projects.html
+CodeFalcon_Projects/Services.html
+CodeFalcon_Projects/Social.html
+CodeFalcon_Projects/Team.html
+CodeFalcon_Projects/Teams.html
+CodeFalcon_Projects/Testimonials.html

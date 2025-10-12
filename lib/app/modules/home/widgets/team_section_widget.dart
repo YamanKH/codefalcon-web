@@ -19,38 +19,7 @@ class TeamSectionWidget extends StatelessWidget {
     return GetX<HomeController>(
       builder: (controller) {
         final isLoading = controller.isLoadingTeams.value;
-        final teamMembers = controller.teamMembers.isNotEmpty ? controller.teamMembers : [
-          TeamMember(
-            id: '1',
-            name: 'Yaman Alkhateb',
-            role: 'Founder & CEO',
-            imageUrl: 'https://api.dicebear.com/8.x/pixel-art/png?seed=YamanAlkhateb',
-            socialLinks: {
-              'linkedin': 'https://www.linkedin.com/in/yaman-alkhateb/',
-              'github': 'https://github.com/YamanKH',
-            },
-          ),
-          TeamMember(
-            id: '2',
-            name: 'Areej Fayadh',
-            role: 'Software Engineer',
-            imageUrl: 'https://api.dicebear.com/8.x/pixel-art/png?seed=AreejFayadh',
-            socialLinks: {
-              'linkedin': 'https://linkedin.com/in/areejfayadh',
-              'github': 'https://github.com/areejfayadh',
-            },
-          ),
-          TeamMember(
-            id: '3',
-            name: 'Ahmed Mohamed',
-            role: 'UI/UX Designer',
-            imageUrl: 'https://api.dicebear.com/8.x/pixel-art/png?seed=AhmedMohamed',
-            socialLinks: {
-              'linkedin': 'https://linkedin.com/in/ahmedmohamed',
-              'github': 'https://github.com/ahmedmohamed',
-            },
-          ),
-        ];
+        final teamMembers = controller.teamMembers;
 
         final isSmallScreen = MediaQuery.of(context).size.width < 600;
 
@@ -70,6 +39,8 @@ class TeamSectionWidget extends StatelessWidget {
                 const SizedBox(height: 30),
                 if (isLoading)
                   const Center(child: CircularProgressIndicator())
+                else if (teamMembers.isEmpty)
+                  const Center(child: Text('No team members available'))
                 else
                   GridView.builder(
                     shrinkWrap: true,

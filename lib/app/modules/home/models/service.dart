@@ -17,8 +17,8 @@ class Service {
     return Service(
       id: json['id']?.toString() ?? '',
       name: json['name']?.toString() ?? '',
-      description: json['description']?.toString() ?? '',
-      iconUrl: json['iconurl']?.toString(),
+      description: json['techused']?.toString() ?? '',
+      iconUrl: json['link']?.toString(),
       imageUrl: json['imageurl']?.toString(),
     );
   }
