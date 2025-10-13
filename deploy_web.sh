@@ -55,5 +55,5 @@ if command -v wrangler &> /dev/null; then
   echo "Cloudflare Pages deployment succeeded."
 else
   echo "Wrangler not found. Install with 'npm i -g wrangler' if needed for Cloudflare deployment."
-  echo "Deployment to git complete. Note: Cloudflare Pages deployment skipped."
+  echo "Build complete. Note: Cloudflare Pages deployment skipped."
 fi
