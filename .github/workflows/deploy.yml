@@ -40,6 +40,7 @@ jobs:
       - name: Deploy to Cloudflare Pages
         run: |
           cd build/web
+          echo "CLOUDFLARE_API_TOKEN is set: $CLOUDFLARE_API_TOKEN"
           wrangler pages deploy . --project-name code-falcon-website
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
