@@ -9,7 +9,6 @@ import 'widgets/header_widget.dart';
 import 'widgets/hero_section_widget.dart';
 import 'widgets/about_section_widget.dart';
 import 'widgets/services_section_widget.dart';
-import 'widgets/calculator_section_widget.dart';
 import 'widgets/projects_section_widget.dart';
 import 'widgets/technologies_section_widget.dart';
 import 'widgets/team_section_widget.dart';
