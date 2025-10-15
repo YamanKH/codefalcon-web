@@ -23,7 +23,6 @@ class HeaderWidget extends StatelessWidget {
                 NavLink(title: 'home'.tr, sectionKey: 'homeSection'),
                 NavLink(title: 'about'.tr, sectionKey: 'aboutSection'),
                 NavLink(title: 'services'.tr, sectionKey: 'servicesSection'),
-                NavLink(title: 'calculator'.tr, sectionKey: 'calculatorSection'),
                 NavLink(title: 'projects'.tr, sectionKey: 'projectsSection'),
                 NavLink(title: 'team'.tr, sectionKey: 'teamSection'),
                 NavLink(title: 'contact'.tr, sectionKey: 'contactSection'),
