@@ -47,7 +47,7 @@ echo "Files in build/web: $(ls -la)"
 echo "Checking if wrangler is available for Cloudflare deployment..."
 if command -v wrangler &> /dev/null; then
   echo "Wrangler is installed. Deploying to Cloudflare Pages..."
-  wrangler pages deploy .
+  wrangler pages deploy . --project-name code-falcon-website
   if [ $? -ne 0 ]; then
     echo "Cloudflare Pages deployment failed."
     exit 1

@@ -8,11 +8,26 @@ import 'models/social_link.dart';
 import 'models/service.dart';
 
 class HomeController extends GetxController {
-  // Use your *working* Web App URL + token (same as Postman)
+  // CURRENT METHOD: Direct Google Apps Script (token exposed in frontend)
   static const String _baseUrl =
       'https://script.google.com/macros/s/AKfycbzux9L2TbcHLAtAXL4vUrDqdJfiKEQd6ytgwOygpNhtLYMRRfQaO9rEgW-w0aWhG6VAtQ/exec';
   static const String _token =
       'b5f8d33e99f6e14028c8e8cc0d475458a4ed6889c7aac0d84ec584b1cb085dd76bb57d77a991c1870a7a4d7bac62f51faadad0b5f5499ae50e25790303566dd3';
+
+  // ALTERNATIVE METHOD: Backend API Proxy (recommended for security)
+  // Uncomment below and comment out the direct method above when you have a backend API
+  // static const String _baseUrl = 'https://your-backend-api.com/api'; // Your secure backend URL
+  // static const String _token = ''; // Token moved to backend, not needed here
+
+  // For backend API, your endpoints would be:
+  // GET /api/projects → fetches projects
+  // GET /api/team → fetches team members
+  // GET /api/testimonials → fetches testimonials
+  // GET /api/social → fetches social links
+  // GET /api/services → fetches services
+  // POST /api/projects → creates project
+  // PUT /api/projects/:id → updates project
+  // DELETE /api/projects/:id → deletes project
 
   final RxList<Project> projects = <Project>[].obs;
   final RxList<TeamMember> teamMembers = <TeamMember>[].obs;
@@ -26,6 +41,7 @@ class HomeController extends GetxController {
   final RxBool isLoadingServices = false.obs;
 
   Uri _uri({Map<String, String>? qp}) {
+    // CURRENT METHOD: Direct Google Apps Script parameters
     final params = <String, String>{
       'token': _token,
       'debug': '1',          // keep while debugging (remove later if you want)
@@ -33,6 +49,14 @@ class HomeController extends GetxController {
       // cache-buster so you always see fresh content during dev:
       'cb': DateTime.now().millisecondsSinceEpoch.toString(),
     };
+
+    // ALTERNATIVE METHOD: Backend API (uncomment when using backend)
+    // For backend API, you might not need token or debug parameters
+    // final params = <String, String>{
+    //   ...?qp,
+    //   'cb': DateTime.now().millisecondsSinceEpoch.toString(),
+    // };
+
     return Uri.parse(_baseUrl).replace(queryParameters: params);
   }
 
@@ -84,7 +108,12 @@ class HomeController extends GetxController {
     final stopwatch = Stopwatch()..start();
     try {
       isLoading.value = true;
+      // CURRENT METHOD: Direct Google Apps Script
       final r = await http.get(_uri(qp: {'sheet': 'Projects', if (q != null && q.isNotEmpty) 'q': q}));
+
+      // ALTERNATIVE METHOD: Backend API (uncomment when using backend)
+      // final r = await http.get(_uri(qp: {'sheet': 'projects', if (q != null && q.isNotEmpty) 'q': q}));
+
       final data = await _decode(r);
       final list = (data['data'] as List).cast<Map<String, dynamic>>();
       projects.assignAll(list.map(Project.fromJson));

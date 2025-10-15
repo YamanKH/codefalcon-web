@@ -15,6 +15,13 @@ This quick guide shows how to deploy only your compiled Flutter web app (`build/
 > - Your custom domain (e.g., `codefalcon.me`) ready to connect after the first deploy.
 
 ---
+## One command to Deploy only web folder to CloudFlare
+
+```bash
+
+cd build/web && wrangler pages deploy . --project-name code-falcon-website
+```
+
 
 ## 1) Build your Flutter web app
 
