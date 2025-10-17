@@ -25,7 +25,7 @@ class CalculatorHomePage extends StatelessWidget {
                 ),
               ],
             ),
-            body: Stepper(
+            body: Obx(() => Stepper(
               currentStep: controller.currentStep.value,
               onStepContinue: () {
                 if (controller.currentStep.value == 6) {
@@ -35,29 +35,7 @@ class CalculatorHomePage extends StatelessWidget {
                 }
               },
               onStepCancel: controller.currentStep.value > 0 ? controller.previousStep : null,
-              controlsBuilder: (context, details) {
-                return Padding(
-                  padding: const EdgeInsets.only(top: 16),
-                  child: Row(
-                    children: [
-                      if (controller.currentStep.value > 0)
-                        Expanded(
-                          child: OutlinedButton(
-                            onPressed: details.onStepCancel,
-                            child: Text('previous'.tr),
-                          ),
-                        ),
-                      if (controller.currentStep.value > 0) SizedBox(width: 12),
-                      Expanded(
-                        child: ElevatedButton(
-                          onPressed: details.onStepContinue,
-                          child: Text(controller.currentStep.value == 6 ? 'finish'.tr : 'next'.tr),
-                        ),
-                      ),
-                    ],
-                  ),
-                );
-              },
+              controlsBuilder: (context, details) => SizedBox.shrink(),
               steps: [
                 Step(
                   title: Text(controller.isArabic ? 'اختر المنصة' : 'Choose Platform'),
@@ -95,35 +73,58 @@ class CalculatorHomePage extends StatelessWidget {
                   isActive: controller.currentStep.value >= 6,
                 ),
               ],
-            ),
-            bottomNavigationBar: Obx(() => controller.totalPrice > 0 ? Container(
+            )),
+            bottomNavigationBar: Obx(() => Container(
               padding: EdgeInsets.all(16),
               color: AppColors.primaryBackground(Get.context!),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text(
-                    controller.isArabic ? 'السعر التقديري:' : 'Estimated Price:',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-                  ),
-                  Text(
-                    '\$${controller.totalPrice.toStringAsFixed(0)}',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.accentColor,
+                  if (controller.totalPrice > 0)
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          controller.isArabic ? 'السعر التقديري:' : 'Estimated Price:',
+                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                        ),
+                        Text(
+                          '\$${controller.totalPrice.toStringAsFixed(0)}',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.accentColor,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
                     ),
+                  if (controller.totalPrice > 0) SizedBox(height: 16),
+                  Row(
+                    children: [
+                      if (controller.currentStep.value > 0)
+                        Expanded(
+                          child: OutlinedButton(
+                            onPressed: controller.previousStep,
+                            child: Text('previous'.tr),
+                          ),
+                        ),
+                      if (controller.currentStep.value > 0) SizedBox(width: 12),
+                      Expanded(
+                        child: ElevatedButton(
+                          onPressed: controller.currentStep.value == 6
+                            ? controller.showQuoteSubmitted
+                            : controller.canProceedToNextStep()
+                              ? controller.nextStep
+                              : null,
+                          child: Text(controller.currentStep.value == 6 ? 'finish'.tr : 'next'.tr),
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
-            ) : SizedBox.shrink()),
-            floatingActionButton: FloatingActionButton(
-              heroTag: 'whatsapp',
-              onPressed: controller.showWhatsAppContact,
-              backgroundColor: Colors.green,
-              child: Icon(Icons.message),
-              tooltip: 'contact_whatsapp'.tr,
-            ),
+            )),
           ),
         );
       },
@@ -173,12 +174,14 @@ class CalculatorHomePage extends StatelessWidget {
                                   Text(
                                     controller.isArabic ? platform.nameAr : platform.nameEn,
                                     style: Theme.of(context).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.bold),
+                                    overflow: TextOverflow.ellipsis,
                                   ),
                                   SizedBox(height: 4),
                                   Text(
                                     controller.isArabic ? platform.descriptionAr : platform.descriptionEn,
                                     style: Theme.of(context).textTheme.bodySmall,
                                     maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
                                   ),
                                 ],
                               ),
@@ -225,6 +228,7 @@ class CalculatorHomePage extends StatelessWidget {
                             controller.isArabic ? platform.nameAr : platform.nameEn,
                             textAlign: TextAlign.center,
                             style: Theme.of(context).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.bold),
+                            overflow: TextOverflow.ellipsis,
                           ),
                           SizedBox(height: 4),
                           Text(
@@ -232,6 +236,7 @@ class CalculatorHomePage extends StatelessWidget {
                             textAlign: TextAlign.center,
                             style: Theme.of(context).textTheme.bodySmall,
                             maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
                           ),
                         ],
                       ),
@@ -396,6 +401,7 @@ class CalculatorHomePage extends StatelessWidget {
           Text(
             name,
             style: TextStyle(fontSize: 12, color: Colors.grey[700]),
+            overflow: TextOverflow.ellipsis,
           ),
         ],
       ),
@@ -511,15 +517,14 @@ class CalculatorHomePage extends StatelessWidget {
                               child: Text(
                                 controller.isArabic ? tier.nameAr : tier.nameEn,
                                 style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
+                                overflow: TextOverflow.ellipsis,
                               ),
                             ),
                             Radio<String>(
                               value: tier.id,
                               groupValue: controller.selectedPackage.value,
                               onChanged: (String? value) {
-                                if (value != null) {
-                                  controller.selectPackage(value);
-                                }
+                                controller.selectPackage(value);
                               },
                             ),
                           ],
@@ -528,6 +533,7 @@ class CalculatorHomePage extends StatelessWidget {
                         Text(
                           controller.isArabic ? tier.descriptionAr : tier.descriptionEn,
                           style: Theme.of(context).textTheme.bodyMedium,
+                          overflow: TextOverflow.ellipsis,
                         ),
                         SizedBox(height: 16),
                         // Included services
@@ -571,6 +577,7 @@ class CalculatorHomePage extends StatelessWidget {
                                     child: Text(
                                       controller.isArabic ? tier.featuresAr[idx] : tier.featuresEn[idx],
                                       style: Theme.of(context).textTheme.bodySmall,
+                                      overflow: TextOverflow.ellipsis,
                                     ),
                                   ),
                                 ],
@@ -653,6 +660,7 @@ class CalculatorHomePage extends StatelessWidget {
                             Text(
                               controller.isArabic ? service.nameAr : service.nameEn,
                               style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
+                              overflow: TextOverflow.ellipsis,
                             ),
                             SizedBox(height: 4),
                             Text(
@@ -794,6 +802,7 @@ class CalculatorHomePage extends StatelessWidget {
                           fontWeight: FontWeight.bold,
                           color: Colors.white,
                         ),
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ],
                   ),
@@ -825,6 +834,7 @@ class CalculatorHomePage extends StatelessWidget {
               fontSize: 14,
               fontWeight: isBold ? FontWeight.bold : FontWeight.normal,
             ),
+            overflow: TextOverflow.ellipsis,
           ),
         ],
       ),
@@ -843,6 +853,7 @@ class CalculatorHomePage extends StatelessWidget {
           Text(
             value,
             style: Theme.of(Get.context!).textTheme.titleMedium,
+            overflow: TextOverflow.ellipsis,
           ),
         ],
       ),

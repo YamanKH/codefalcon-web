@@ -1,7 +1,6 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:flutter/foundation.dart';
 import 'package:code_falcon/app/modules/home/locale_controller.dart';
 
 class Platform {
@@ -445,8 +444,11 @@ class CalculatorController extends GetxController {
 
     // Base price depends on platform
     double basePrice = 200.0; // Default for website
-    if (selectedPlatform.value == 'mobile') basePrice = 300.0;
-    else if (selectedPlatform.value == 'both') basePrice = 500.0;
+    if (selectedPlatform.value == 'mobile') {
+      basePrice = 300.0;
+    } else if (selectedPlatform.value == 'both') {
+      basePrice = 500.0;
+    }
 
     // Add technology cost
     double techCost = selectedTechnologyData?.basePrice ?? 0.0;
@@ -477,8 +479,11 @@ class CalculatorController extends GetxController {
 
     // Base price depends on platform
     double basePrice = 200.0; // Default for website
-    if (selectedPlatform.value == 'mobile') basePrice = 300.0;
-    else if (selectedPlatform.value == 'both') basePrice = 500.0;
+    if (selectedPlatform.value == 'mobile') {
+      basePrice = 300.0;
+    } else if (selectedPlatform.value == 'both') {
+      basePrice = 500.0;
+    }
 
     double techCost = selectedTechnologyData?.basePrice ?? 0.0;
     double screensCost = numberOfScreens.value > 2 ? (numberOfScreens.value - 2) * 30.0 : 0.0;
@@ -520,10 +525,39 @@ class CalculatorController extends GetxController {
   }
 
   // Methods
+  bool canProceedToNextStep() {
+    switch (currentStep.value) {
+      case 0:
+        return selectedPlatform.value != null;
+      case 1:
+        return selectedTechnology.value != null;
+      case 2:
+        return true; // Number of screens is always valid (has default value)
+      case 3:
+        return selectedBackend.value != null && selectedDatabase.value != null;
+      case 4:
+        return selectedPackage.value != null;
+      case 5:
+        return true; // Additional services are optional
+      case 6:
+        return true; // Summary step
+      default:
+        return false;
+    }
+  }
+
   void nextStep() {
-    if (currentStep.value < 6) {
+    if (currentStep.value < 6 && canProceedToNextStep()) {
       currentStep.value++;
       update();
+    } else if (!canProceedToNextStep()) {
+      Get.snackbar(
+        isArabic ? 'مطلوب' : 'Required',
+        isArabic ? 'يرجى إكمال الخطوة الحالية' : 'Please complete the current step',
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.orange,
+        colorText: Colors.white,
+      );
     }
   }
 
@@ -568,40 +602,62 @@ class CalculatorController extends GetxController {
   }
 
   void showQuoteSubmitted() async {
-    String message = 'Hello! I would like to request a quote for my project.\n\n';
+    String message = isArabic
+      ? 'مرحباً! أود طلب عرض سعر لمشروعي.\n\n'
+      : 'Hello! I would like to request a quote for my project.\n\n';
 
     if (selectedPlatformData != null) {
-      message += 'Platform: ${selectedPlatformData!.nameEn}\n';
+      message += isArabic
+        ? 'المنصة: ${selectedPlatformData!.nameAr}\n'
+        : 'Platform: ${selectedPlatformData!.nameEn}\n';
     }
     if (selectedTechnologyData != null) {
-      message += 'Technology: ${selectedTechnologyData!.nameEn}\n';
+      message += isArabic
+        ? 'التقنية: ${selectedTechnologyData!.nameAr}\n'
+        : 'Technology: ${selectedTechnologyData!.nameEn}\n';
     }
-    message += 'Number of Screens: ${numberOfScreens.value}\n';
+    message += isArabic
+      ? 'عدد الشاشات: ${numberOfScreens.value}\n'
+      : 'Number of Screens: ${numberOfScreens.value}\n';
     if (selectedBackendData != null) {
-      message += 'Backend: ${selectedBackendData!.name}\n';
+      message += isArabic
+        ? 'الخادم: ${selectedBackendData!.name}\n'
+        : 'Backend: ${selectedBackendData!.name}\n';
     }
     if (selectedDatabaseData != null) {
-      message += 'Database: ${selectedDatabaseData!.name}\n';
+      message += isArabic
+        ? 'قاعدة البيانات: ${selectedDatabaseData!.name}\n'
+        : 'Database: ${selectedDatabaseData!.name}\n';
     }
     if (selectedPackageData != null) {
-      message += 'Package: ${selectedPackageData!.nameEn}\n';
+      message += isArabic
+        ? 'الباقة: ${selectedPackageData!.nameAr}\n'
+        : 'Package: ${selectedPackageData!.nameEn}\n';
     }
     if (selectedAdditionalServicesData.isNotEmpty) {
-      message += 'Additional Services: ${selectedAdditionalServicesData.map((s) => s.nameEn).join(', ')}\n';
+      message += isArabic
+        ? 'الخدمات الإضافية: ${selectedAdditionalServicesData.map((s) => s.nameAr).join(', ')}\n'
+        : 'Additional Services: ${selectedAdditionalServicesData.map((s) => s.nameEn).join(', ')}\n';
     }
-    message += 'Subtotal: \$${subtotalPrice.toStringAsFixed(0)}\n';
-    message += 'Total Price: \$${totalPrice.toStringAsFixed(0)}\n\n';
-    message += 'Please contact me for more details.';
+    message += isArabic
+      ? 'المجموع الفرعي: ${subtotalPrice.toStringAsFixed(0)}\$\n'
+      : 'Subtotal: \$${subtotalPrice.toStringAsFixed(0)}\n';
+    message += isArabic
+      ? 'السعر الإجمالي: ${totalPrice.toStringAsFixed(0)}\$\n\n'
+      : 'Total Price: \$${totalPrice.toStringAsFixed(0)}\n\n';
+    message += isArabic
+      ? 'يرجى التواصل معي للمزيد من التفاصيل.'
+      : 'Please contact me for more details.';
 
-    String phone = '00963982286463';
+    String phone = '+963982286463';
     Uri whatsappUrl = Uri.parse('https://wa.me/$phone?text=${Uri.encodeComponent(message)}');
 
     if (await canLaunchUrl(whatsappUrl)) {
       await launchUrl(whatsappUrl, mode: LaunchMode.externalApplication);
     } else {
       Get.snackbar(
-        'Error',
-        'Unable to open WhatsApp',
+        isArabic ? 'خطأ' : 'Error',
+        isArabic ? 'غير قادر على فتح واتساب' : 'Unable to open WhatsApp',
         snackPosition: SnackPosition.BOTTOM,
         backgroundColor: Colors.red,
         colorText: Colors.white,
@@ -611,8 +667,8 @@ class CalculatorController extends GetxController {
 
   void showConsultingComingSoon() {
     Get.snackbar(
-      'info'.tr,
-      'consulting_booking_coming_soon'.tr,
+      isArabic ? 'معلومات' : 'Info',
+      isArabic ? 'حجز الاستشارات قريباً' : 'Consulting booking coming soon',
       snackPosition: SnackPosition.BOTTOM,
       backgroundColor: Colors.blue,
       colorText: Colors.white,
@@ -620,13 +676,13 @@ class CalculatorController extends GetxController {
   }
 
   void showWhatsAppContact() async {
-    final Uri whatsappUrl = Uri.parse('https://wa.me/00963982286463');
+    final Uri whatsappUrl = Uri.parse('https://wa.me/+963982286463');
     if (await canLaunchUrl(whatsappUrl)) {
       await launchUrl(whatsappUrl, mode: LaunchMode.externalApplication);
     } else {
       Get.snackbar(
-        'error'.tr,
-        'whatsapp_not_available'.tr,
+        isArabic ? 'خطأ' : 'Error',
+        isArabic ? 'واتساب غير متوفر' : 'WhatsApp not available',
         snackPosition: SnackPosition.BOTTOM,
         backgroundColor: Colors.red,
         colorText: Colors.white,
@@ -636,8 +692,8 @@ class CalculatorController extends GetxController {
 
   void showPreMadeProjectsComingSoon() {
     Get.snackbar(
-      'info'.tr,
-      'premade_projects_coming_soon'.tr,
+      isArabic ? 'معلومات' : 'Info',
+      isArabic ? 'المشاريع الجاهزة قريباً' : 'Pre-made projects coming soon',
       snackPosition: SnackPosition.BOTTOM,
       backgroundColor: Colors.orange,
       colorText: Colors.white,
